@@ -20,7 +20,7 @@ public class Sys {
     }
 
     public static int POLLING_INTERVAL=10;
-    public static int POLLINGSUNTIMES_INTERVAL =12*60;
+    public static int POLLINGSUNTIMES_INTERVAL =20*60;
 
     public static void save(String key, String value, Context context){
         SharedPreferences preferences = context.getSharedPreferences("mchPro", context.MODE_PRIVATE);

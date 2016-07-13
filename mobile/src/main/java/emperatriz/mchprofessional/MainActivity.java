@@ -80,6 +80,10 @@ public class MainActivity extends AppCompatActivity  implements GoogleApiClient.
 
 
 
+        if (ContextCompat.checkSelfPermission( this, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED ||
+            ContextCompat.checkSelfPermission( this, android.Manifest.permission.INTERNET) != PackageManager.PERMISSION_GRANTED    ) {
+            ActivityCompat.requestPermissions(MainActivity.this,new String[]{Manifest.permission.ACCESS_COARSE_LOCATION,Manifest.permission.INTERNET},2706);
+        }
 
     }
 
@@ -121,7 +125,7 @@ public class MainActivity extends AppCompatActivity  implements GoogleApiClient.
                     if ( ContextCompat.checkSelfPermission( this, android.Manifest.permission.ACCESS_COARSE_LOCATION ) == PackageManager.PERMISSION_GRANTED ) {
                         Location lastlocation = locationManager.getLastKnownLocation(locationProvider);
                         SunTimes st = new SunTimes();
-                        st.execute("http://api.sunrise-sunset.org/json?lat="+lastlocation.getLatitude()+"&lng="+lastlocation.getLongitude()+"&date=tomorrow&formatted=0");
+                        st.execute("http://api.sunrise-sunset.org/json?lat="+lastlocation.getLatitude()+"&lng="+lastlocation.getLongitude()+"&date=today&formatted=0");
                     }
                 }catch (Exception ex){
 

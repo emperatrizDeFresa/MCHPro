@@ -374,7 +374,7 @@ public class MCHWatchFace extends CanvasWatchFaceService implements SensorEventL
                     if (mTapCount % 2 == 0){
                         if (x>236 && x<236+56){
                             if (y>28 && y<28+56){
-//                                pollSuntimes(true);
+//                                    pollSuntimes(true);
 //                                Toast.makeText(getApplicationContext(),"Suntimes requested",Toast.LENGTH_SHORT).show();
                             }
                         }
@@ -390,7 +390,7 @@ public class MCHWatchFace extends CanvasWatchFaceService implements SensorEventL
         @Override
         public void onDraw(Canvas canvas, Rect bounds) {
 
-            pollPhoneBattery();
+            pollPhoneBattery(false);
             pollSuntimes(false);
 
 
@@ -449,12 +449,14 @@ public class MCHWatchFace extends CanvasWatchFaceService implements SensorEventL
             }
         }
 
-        private void pollPhoneBattery() {
-            long lastPolled = Long.parseLong(Sys.getString("lastPolled","0",getApplicationContext()));
-            Sys.save("lastPolled", Calendar.getInstance().getTimeInMillis()+"",getApplicationContext());
-            boolean recentlyPolled = (Calendar.getInstance().getTimeInMillis()-lastPolled)/(60*1000)<Sys.POLLING_INTERVAL;
-            if (!recentlyPolled){
+        private void pollPhoneBattery(boolean force) {
+            long nextPoll = Long.parseLong(Sys.getString("nextPoll","0",getApplicationContext()));
+//            Log.i("MCH Professional",Calendar.getInstance().getTimeInMillis()+">"+nextPoll);
+            boolean canPoll = Calendar.getInstance().getTimeInMillis()>nextPoll;
+            if (canPoll || force){
+                Sys.save("nextPoll", (Calendar.getInstance().getTimeInMillis()+Sys.POLLING_INTERVAL*60*1000)+"",getApplicationContext());
                 if( wearNode != null && mGoogleApiClient!=null && mGoogleApiClient.isConnected()) {
+                    Log.i("MCH Professional","Sending message");
                     Wearable.MessageApi.sendMessage(
                             mGoogleApiClient, wearNode.getId(), Sys.PHONE_BATTERY_PATH, null).setResultCallback(
 
@@ -463,7 +465,7 @@ public class MCHWatchFace extends CanvasWatchFaceService implements SensorEventL
                                 public void onResult(MessageApi.SendMessageResult sendMessageResult) {
 
                                     if (sendMessageResult.getStatus().isSuccess()) {
-                                        //Sys.save("lastPolled", Calendar.getInstance().getTimeInMillis()+"",getApplicationContext());
+                                        Log.i("MCH Professional","Message sent");
                                     }else{
                                     }
                                 }
@@ -478,10 +480,10 @@ public class MCHWatchFace extends CanvasWatchFaceService implements SensorEventL
 
 
         private void pollSuntimes(boolean force) {
-            long lastPolled = Long.parseLong(Sys.getString("lastPolledAll","0",getApplicationContext()));
-            Sys.save("lastPolledAll", Calendar.getInstance().getTimeInMillis() + "", getApplicationContext());
-            boolean recentlyPolled = (Calendar.getInstance().getTimeInMillis()-lastPolled)/(60*1000)<Sys.POLLINGSUNTIMES_INTERVAL;
-            if (!recentlyPolled || force) {
+            long nextPoll = Long.parseLong(Sys.getString("nextPollSun","0",getApplicationContext()));
+            boolean canPoll = Calendar.getInstance().getTimeInMillis()>nextPoll;
+            if (canPoll || force) {
+                Sys.save("nextPollSun", (Calendar.getInstance().getTimeInMillis()+Sys.POLLINGSUNTIMES_INTERVAL*60*1000) + "", getApplicationContext());
                 if (wearNode != null && mGoogleApiClient != null && mGoogleApiClient.isConnected()) {
                     //
                     Wearable.MessageApi.sendMessage(

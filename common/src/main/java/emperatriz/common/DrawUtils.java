@@ -37,24 +37,24 @@ public class DrawUtils {
             paint.setColor(0xff000000);
 
 
-        paint.setTextSize(25);
+        paint.setTextSize(24);
         //paint.setLetterSpacing(0.06f);
 
         paint.setAlpha(51);
-        canvas.drawText(mTime.format("%A"), 39, 58, paint);
+        canvas.drawText(mTime.format("%A"), 39, 57, paint);
 //        canvas.drawText("MIÉRCOLES", 39, 58, paint);
         paint.setAlpha(255);
-        canvas.drawText(mTime.format("%A"), 36, 56, paint);
+        canvas.drawText(mTime.format("%A"), 36, 54, paint);
 //        canvas.drawText("MIÉRCOLES", 36, 56, paint);
         paint.setAlpha(51);
         String date = mTime.format("%d %B");
         if (date.startsWith("0")){
             date = date.substring(1);
         }
-        canvas.drawText(date, 39, 83, paint);
+        canvas.drawText(date, 39, 82, paint);
 //        canvas.drawText("23 SEPTIEMBRE", 39, 83, paint);
         paint.setAlpha(255);
-        canvas.drawText(date, 36, 80, paint);
+        canvas.drawText(date, 36, 79, paint);
 //        canvas.drawText("23 SEPTIEMBRE", 36, 80, paint);
     }
 
