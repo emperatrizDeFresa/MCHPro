@@ -25,6 +25,7 @@ import com.google.android.gms.wearable.Wearable;
 import com.google.android.gms.wearable.WearableListenerService;
 
 
+import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
@@ -49,7 +50,7 @@ public class Listener extends WearableListenerService implements GoogleApiClient
     String sunrise;
     String sunset;
     boolean connected=false;
-    boolean sendBatery=false;
+
 
     @Override
     public void onMessageReceived(MessageEvent messageEvent) {
@@ -61,15 +62,22 @@ public class Listener extends WearableListenerService implements GoogleApiClient
             int level = batteryIntent.getIntExtra(BatteryManager.EXTRA_LEVEL, -1);
             int scale = batteryIntent.getIntExtra(BatteryManager.EXTRA_SCALE, -1);
             batteryPct = Math.round(level*100 / (float)scale)+"";
-            sendBatery=true;
             mGoogleApiClient = new GoogleApiClient.Builder(getApplicationContext())
                     .addApi(Wearable.API)
-                    .addConnectionCallbacks(this)
+                    .addConnectionCallbacks(new GoogleApiClient.ConnectionCallbacks() {
+                        @Override
+                        public void onConnected(@Nullable Bundle bundle) {
+                            sendMessage(Sys.PHONE_BATTERY_PATH, batteryPct);
+                        }
+
+                        @Override
+                        public void onConnectionSuspended(int i) {
+
+                        }
+                    })
                     .build();
             mGoogleApiClient.connect();
         } else  if (messageEvent.getPath().equals(Sys.SUNTIMES_PATH)){
-
-            sendBatery=false;
             mGoogleApiClient = new GoogleApiClient.Builder(getApplicationContext())
                     .addApi(Wearable.API)
                     .addConnectionCallbacks(this)
@@ -93,10 +101,6 @@ public class Listener extends WearableListenerService implements GoogleApiClient
     @Override
     public void onConnected(Bundle bundle) {
         connected=true;
-        if (sendBatery){
-            sendMessage(Sys.PHONE_BATTERY_PATH, batteryPct);
-        }
-
     }
 
     private void sendMessage( final String path, final String text ) {

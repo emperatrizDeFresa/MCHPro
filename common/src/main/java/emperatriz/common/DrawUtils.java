@@ -38,32 +38,29 @@ public class DrawUtils {
 
 
         paint.setTextSize(24);
-        //paint.setLetterSpacing(0.06f);
+//        paint.setLetterSpacing(-0.05f);
 
         paint.setAlpha(51);
-        canvas.drawText(mTime.format("%A"), 39, 57, paint);
-//        canvas.drawText("MIÉRCOLES", 39, 58, paint);
+        canvas.drawText(mTime.format("%A"), 42, 57, paint);
+//        canvas.drawText("MIÉRCOLES", 42, 57, paint);
         paint.setAlpha(255);
-        canvas.drawText(mTime.format("%A"), 36, 54, paint);
-//        canvas.drawText("MIÉRCOLES", 36, 56, paint);
+        canvas.drawText(mTime.format("%A"), 39, 54, paint);
+//        canvas.drawText("MIÉRCOLES", 39, 54, paint);
         paint.setAlpha(51);
         String date = mTime.format("%d %B");
         if (date.startsWith("0")){
             date = date.substring(1);
         }
-        canvas.drawText(date, 39, 82, paint);
-//        canvas.drawText("23 SEPTIEMBRE", 39, 83, paint);
+        canvas.drawText(date, 42, 82, paint);
+//        canvas.drawText("23 SEPTIEMBRE", 42, 82, paint);
         paint.setAlpha(255);
-        canvas.drawText(date, 36, 79, paint);
-//        canvas.drawText("23 SEPTIEMBRE", 36, 80, paint);
+        canvas.drawText(date, 39, 79, paint);
+//        canvas.drawText("23 SEPTIEMBRE", 39, 79, paint);
     }
 
     public static void drawHHmm(Paint paint){
-//        if (isInAmbientMode) {
-//            paint.setColor(0xffffffff);
-//        }else{
+
         paint.setColor(0xff000000);
-//        }
         paint.setTextSize(70);
         paint.setLetterSpacing(0.08f);
 
@@ -73,9 +70,17 @@ public class DrawUtils {
         if (time.length()==4){
             time = "0"+time;
         }
-        canvas.drawText(time, 37, 158, paint);
+
+        String hh = time.split(":")[0];
+        String mm = time.split(":")[1];
+        canvas.drawText(hh, 40, 158, paint);
+        canvas.drawText(":", 157, 158, paint);
+        canvas.drawText(mm, 172, 158, paint);
         paint.setAlpha(255);
-        canvas.drawText(time, 34, 155, paint);
+        canvas.drawText(hh, 37, 155, paint);
+        canvas.drawText(":", 153, 155, paint);
+        canvas.drawText(":", 154, 155, paint);
+        canvas.drawText(mm, 169, 155, paint);
     }
 
     public static void drawSecs(Paint paint){
