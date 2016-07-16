@@ -189,7 +189,6 @@ public class MCHWatchFace extends CanvasWatchFaceService implements SensorEventL
             mYOffset = resources.getDimension(R.dimen.digital_y_offset);
 
             mBackgroundPaint = new Paint();
-            mBackgroundPaint.setColor(Sys.getInt("color", 0xff00dddd, MCHWatchFace.this));
 
             Typeface font1 = Typeface.createFromAsset(getApplicationContext().getAssets(), "fonts/SF Square Head.ttf");
             Typeface font2 = Typeface.createFromAsset(getApplicationContext().getAssets(), "fonts/Square.ttf");
@@ -206,42 +205,42 @@ public class MCHWatchFace extends CanvasWatchFaceService implements SensorEventL
             whitePaint.setColor(0xffffffff);
 
 
-            mBackgroundBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.back);
-            mBackgroundBitmapAmb = BitmapFactory.decodeResource(getResources(), R.drawable.backamb);
+            mBackgroundBitmap = BitmapFactory.decodeResource(getResources(), emperatriz.common.R.drawable.back);
+            mBackgroundBitmapAmb = BitmapFactory.decodeResource(getResources(), emperatriz.common.R.drawable.backamb);
 
             float scale = ((float) 320) / (float) mBackgroundBitmap.getWidth();
             mBackgroundBitmap = Bitmap.createScaledBitmap(mBackgroundBitmap,(int) (mBackgroundBitmap.getWidth() * scale),(int) (mBackgroundBitmap.getHeight() * scale), true);
             mBackgroundBitmapAmb = Bitmap.createScaledBitmap(mBackgroundBitmapAmb,(int) (mBackgroundBitmapAmb.getWidth() * scale),(int) (mBackgroundBitmapAmb.getHeight() * scale), true);
 
             bells = new ArrayList<Bitmap>();
-            bell = BitmapFactory.decodeResource(getResources(), R.drawable.bell);
+            bell = BitmapFactory.decodeResource(getResources(), emperatriz.common.R.drawable.bell);
             bell = Bitmap.createScaledBitmap(bell,(int) (bell.getWidth() * scale),(int) (bell.getHeight() * scale), true);
             bells.add(bell);
-            bell1 = BitmapFactory.decodeResource(getResources(), R.drawable.bell1);
+            bell1 = BitmapFactory.decodeResource(getResources(), emperatriz.common.R.drawable.bell1);
             bell1 = Bitmap.createScaledBitmap(bell1,(int) (bell1.getWidth() * scale),(int) (bell1.getHeight() * scale), true);
             bells.add(bell1);
-            bell2 = BitmapFactory.decodeResource(getResources(), R.drawable.bell2);
+            bell2 = BitmapFactory.decodeResource(getResources(), emperatriz.common.R.drawable.bell2);
             bell2 = Bitmap.createScaledBitmap(bell2,(int) (bell2.getWidth() * scale),(int) (bell2.getHeight() * scale), true);
             bells.add(bell2);
-            bell3 = BitmapFactory.decodeResource(getResources(), R.drawable.bell3);
+            bell3 = BitmapFactory.decodeResource(getResources(), emperatriz.common.R.drawable.bell3);
             bell3 = Bitmap.createScaledBitmap(bell3,(int) (bell3.getWidth() * scale),(int) (bell3.getHeight() * scale), true);
             bells.add(bell3);
-            bell4 = BitmapFactory.decodeResource(getResources(), R.drawable.bell4);
+            bell4 = BitmapFactory.decodeResource(getResources(), emperatriz.common.R.drawable.bell4);
             bell4 = Bitmap.createScaledBitmap(bell4,(int) (bell4.getWidth() * scale),(int) (bell4.getHeight() * scale), true);
             bells.add(bell4);
-            bell5 = BitmapFactory.decodeResource(getResources(), R.drawable.bell5);
+            bell5 = BitmapFactory.decodeResource(getResources(), emperatriz.common.R.drawable.bell5);
             bell5 = Bitmap.createScaledBitmap(bell5,(int) (bell5.getWidth() * scale),(int) (bell5.getHeight() * scale), true);
             bells.add(bell5);
-            bell6 = BitmapFactory.decodeResource(getResources(), R.drawable.bell6);
+            bell6 = BitmapFactory.decodeResource(getResources(), emperatriz.common.R.drawable.bell6);
             bell6 = Bitmap.createScaledBitmap(bell6,(int) (bell6.getWidth() * scale),(int) (bell6.getHeight() * scale), true);
             bells.add(bell6);
-            bell7 = BitmapFactory.decodeResource(getResources(), R.drawable.bell7);
+            bell7 = BitmapFactory.decodeResource(getResources(), emperatriz.common.R.drawable.bell6);
             bell7 = Bitmap.createScaledBitmap(bell7,(int) (bell7.getWidth() * scale),(int) (bell7.getHeight() * scale), true);
             bells.add(bell7);
-            bell8 = BitmapFactory.decodeResource(getResources(), R.drawable.bell8);
+            bell8 = BitmapFactory.decodeResource(getResources(), emperatriz.common.R.drawable.bell8);
             bell8 = Bitmap.createScaledBitmap(bell8,(int) (bell8.getWidth() * scale),(int) (bell8.getHeight() * scale), true);
             bells.add(bell8);
-            bell9 = BitmapFactory.decodeResource(getResources(), R.drawable.bell9);
+            bell9 = BitmapFactory.decodeResource(getResources(), emperatriz.common.R.drawable.bell9);
             bell9 = Bitmap.createScaledBitmap(bell9,(int) (bell9.getWidth() * scale),(int) (bell9.getHeight() * scale), true);
             bells.add(bell9);
 
@@ -392,7 +391,6 @@ public class MCHWatchFace extends CanvasWatchFaceService implements SensorEventL
 
             pollPhoneBattery(false);
             pollSuntimes(false);
-
 
             mTime.setToNow();
 

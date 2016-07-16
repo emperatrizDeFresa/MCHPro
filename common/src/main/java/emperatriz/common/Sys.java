@@ -2,6 +2,14 @@ package emperatriz.common;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.content.pm.PackageInfo;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.drawable.Drawable;
+import android.util.Log;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class Sys {
 
@@ -15,6 +23,7 @@ public class Sys {
 
     public static final String PHONE_BATTERY_PATH = "/mch/battery";
     public static final String SUNTIMES_PATH = "/mch/suntimes";
+    public static final String COLOR_PATH = "/mch/color";
 
     private Sys(){
     }
@@ -44,6 +53,17 @@ public class Sys {
     public static int getInt(String key, int defValue, Context context) {
         SharedPreferences preferences = context.getSharedPreferences("mchPro", context.MODE_PRIVATE);
         return preferences.getInt(key, defValue);
+    }
+
+    public static String getInstalledApps(Context ctx) {
+        String ret="";
+        List<PackageInfo> packs = ctx.getPackageManager().getInstalledPackages(0);
+        for(int i=0;i<packs.size();i++) {
+            PackageInfo p = packs.get(i);
+            ret += p.applicationInfo.loadLabel(ctx.getPackageManager()).toString()+",";
+            ret += p.packageName+";";
+        }
+        return ret;
     }
 
 

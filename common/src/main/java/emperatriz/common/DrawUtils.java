@@ -19,8 +19,8 @@ public class DrawUtils {
     public static long now;
 
     public static void drawBackground(Bitmap mBackgroundBitmap, Bitmap mBackgroundBitmapAmb,Paint mBackgroundPaint, Paint whitePaint){
+        mBackgroundPaint.setColor(color);
         if (isInAmbientMode) {
-
             canvas.drawRect(0, 0, width, height, whitePaint);
             canvas.drawBitmap(mBackgroundBitmapAmb, 0, 0, mBackgroundPaint);
         } else {

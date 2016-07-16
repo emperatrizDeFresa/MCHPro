@@ -1,7 +1,6 @@
 package emperatriz.mchprofessional;
 
 import android.Manifest;
-import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
@@ -11,12 +10,10 @@ import android.location.LocationManager;
 import android.os.AsyncTask;
 import android.os.BatteryManager;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
+import android.support.v4.content.ContextCompat;
 
-import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.common.api.ResultCallback;
-import com.google.android.gms.wearable.DataApi;
-import com.google.android.gms.wearable.DataMap;
 import com.google.android.gms.wearable.MessageApi;
 import com.google.android.gms.wearable.MessageEvent;
 import com.google.android.gms.wearable.Node;
@@ -24,15 +21,8 @@ import com.google.android.gms.wearable.NodeApi;
 import com.google.android.gms.wearable.Wearable;
 import com.google.android.gms.wearable.WearableListenerService;
 
-
-import android.support.annotation.Nullable;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.ContextCompat;
-import android.util.Log;
-
 import org.json.JSONObject;
 
-import java.io.DataOutputStream;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.TimeZone;
@@ -42,7 +32,7 @@ import emperatriz.common.Sys;
 /**
  * Created by ramon on 11/04/16.
  */
-public class Listener extends WearableListenerService implements GoogleApiClient.ConnectionCallbacks{
+public class ListenerSun extends WearableListenerService implements GoogleApiClient.ConnectionCallbacks{
 
     private GoogleApiClient mGoogleApiClient;
     private String mPeerId;
@@ -54,30 +44,7 @@ public class Listener extends WearableListenerService implements GoogleApiClient
 
     @Override
     public void onMessageReceived(MessageEvent messageEvent) {
-
-
-
-        if (messageEvent.getPath().equals(Sys.PHONE_BATTERY_PATH)) {
-            Intent batteryIntent = registerReceiver(null, new IntentFilter(Intent.ACTION_BATTERY_CHANGED));
-            int level = batteryIntent.getIntExtra(BatteryManager.EXTRA_LEVEL, -1);
-            int scale = batteryIntent.getIntExtra(BatteryManager.EXTRA_SCALE, -1);
-            batteryPct = Math.round(level*100 / (float)scale)+"";
-            mGoogleApiClient = new GoogleApiClient.Builder(getApplicationContext())
-                    .addApi(Wearable.API)
-                    .addConnectionCallbacks(new GoogleApiClient.ConnectionCallbacks() {
-                        @Override
-                        public void onConnected(@Nullable Bundle bundle) {
-                            sendMessage(Sys.PHONE_BATTERY_PATH, batteryPct);
-                        }
-
-                        @Override
-                        public void onConnectionSuspended(int i) {
-
-                        }
-                    })
-                    .build();
-            mGoogleApiClient.connect();
-        } else  if (messageEvent.getPath().equals(Sys.SUNTIMES_PATH)){
+    if (messageEvent.getPath().equals(Sys.SUNTIMES_PATH)){
             mGoogleApiClient = new GoogleApiClient.Builder(getApplicationContext())
                     .addApi(Wearable.API)
                     .addConnectionCallbacks(this)
@@ -86,7 +53,7 @@ public class Listener extends WearableListenerService implements GoogleApiClient
             try{
                 LocationManager locationManager = (LocationManager) getApplicationContext().getSystemService(Context.LOCATION_SERVICE);
                 String locationProvider = LocationManager.NETWORK_PROVIDER;
-                if ( ContextCompat.checkSelfPermission( this, android.Manifest.permission.ACCESS_COARSE_LOCATION ) == PackageManager.PERMISSION_GRANTED ) {
+                if ( ContextCompat.checkSelfPermission( this, Manifest.permission.ACCESS_COARSE_LOCATION ) == PackageManager.PERMISSION_GRANTED ) {
                     Location lastlocation = locationManager.getLastKnownLocation(locationProvider);
                     SunTimes st = new SunTimes();
                     st.execute("http://api.sunrise-sunset.org/json?lat="+lastlocation.getLatitude()+"&lng="+lastlocation.getLongitude()+"&date=tomorrow&formatted=0");

@@ -34,6 +34,10 @@ public class MessageListener extends WearableListenerService{
             final String message = new String(messageEvent.getData());
             Sys.save("sunrise",message.substring(0,5),this);
             Sys.save("sunset",message.substring(6,11),this);
+        }else  if (messageEvent.getPath().equals(Sys.COLOR_PATH)) {
+            final String message = new String(messageEvent.getData());
+            int c = Integer.parseInt(message);
+            Sys.save("color",c,this);
         }
     }
 }
