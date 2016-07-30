@@ -17,15 +17,16 @@ public class DrawUtils {
     public static Time mTime;
     public static int color;
     public static long now;
+    public static int offsetX,offsetY;
 
     public static void drawBackground(Bitmap mBackgroundBitmap, Bitmap mBackgroundBitmapAmb,Paint mBackgroundPaint, Paint whitePaint){
         mBackgroundPaint.setColor(color);
         if (isInAmbientMode) {
-            canvas.drawRect(0, 0, width, height, whitePaint);
-            canvas.drawBitmap(mBackgroundBitmapAmb, 0, 0, mBackgroundPaint);
+            canvas.drawRect(offsetX+0, offsetY+0, width, height, whitePaint);
+            canvas.drawBitmap(mBackgroundBitmapAmb, offsetX+0, offsetY+0, mBackgroundPaint);
         } else {
-            canvas.drawRect(0, 0, width, height, mBackgroundPaint);
-            canvas.drawBitmap(mBackgroundBitmap, 0, 0, mBackgroundPaint);
+            canvas.drawRect(offsetX+0, offsetY+0, width, height, mBackgroundPaint);
+            canvas.drawBitmap(mBackgroundBitmap, offsetX+0, offsetY+0, mBackgroundPaint);
         }
 
 
@@ -41,20 +42,20 @@ public class DrawUtils {
 //        paint.setLetterSpacing(-0.05f);
 
         paint.setAlpha(51);
-        canvas.drawText(mTime.format("%A"), 42, 57, paint);
+        canvas.drawText(mTime.format("%A"), offsetX+42, offsetY+57, paint);
 //        canvas.drawText("MIÉRCOLES", 42, 57, paint);
         paint.setAlpha(255);
-        canvas.drawText(mTime.format("%A"), 39, 54, paint);
+        canvas.drawText(mTime.format("%A"), offsetX+39, offsetY+54, paint);
 //        canvas.drawText("MIÉRCOLES", 39, 54, paint);
         paint.setAlpha(51);
         String date = mTime.format("%d %B");
         if (date.startsWith("0")){
             date = date.substring(1);
         }
-        canvas.drawText(date, 42, 82, paint);
+        canvas.drawText(date, offsetX+42, offsetY+82, paint);
 //        canvas.drawText("23 SEPTIEMBRE", 42, 82, paint);
         paint.setAlpha(255);
-        canvas.drawText(date, 39, 79, paint);
+        canvas.drawText(date, offsetX+39, offsetY+79, paint);
 //        canvas.drawText("23 SEPTIEMBRE", 39, 79, paint);
     }
 
@@ -73,14 +74,14 @@ public class DrawUtils {
 
         String hh = time.split(":")[0];
         String mm = time.split(":")[1];
-        canvas.drawText(hh, 40, 158, paint);
-        canvas.drawText(":", 157, 158, paint);
-        canvas.drawText(mm, 172, 158, paint);
+        canvas.drawText(hh, offsetX+40, offsetY+158, paint);
+        canvas.drawText(":", offsetX+157, offsetY+158, paint);
+        canvas.drawText(mm, offsetX+172, offsetY+158, paint);
         paint.setAlpha(255);
-        canvas.drawText(hh, 37, 155, paint);
-        canvas.drawText(":", 153, 155, paint);
-        canvas.drawText(":", 154, 155, paint);
-        canvas.drawText(mm, 169, 155, paint);
+        canvas.drawText(hh, offsetX+37, offsetY+155, paint);
+        canvas.drawText(":", offsetX+153, offsetY+155, paint);
+        canvas.drawText(":", offsetX+154, offsetY+155, paint);
+        canvas.drawText(mm, offsetX+169, offsetY+155, paint);
     }
 
     public static void drawSecs(Paint paint){
@@ -97,9 +98,9 @@ public class DrawUtils {
         }else{
             paint.setColor(0xff000000);
             paint.setAlpha(51);
-            canvas.drawText(secs, 219, 199, paint);
+            canvas.drawText(secs, offsetX+219, offsetY+199, paint);
             paint.setAlpha(255);
-            canvas.drawText(secs, 216, 196, paint);
+            canvas.drawText(secs, offsetX+216, offsetY+196, paint);
         }
 
     }
@@ -115,9 +116,9 @@ public class DrawUtils {
         paint.setLetterSpacing(0.05f);
 
         paint.setAlpha(51);
-        canvas.drawText(value, 72, 209, paint);
+        canvas.drawText(value, offsetX+72, offsetY+209, paint);
         paint.setAlpha(255);
-        canvas.drawText(value, 69, 206, paint);
+        canvas.drawText(value, offsetX+69, offsetY+206, paint);
     }
 
     public static void drawPhoneBattery(String value, Paint paint){
@@ -128,9 +129,9 @@ public class DrawUtils {
 
         float w = paint.measureText(value);
         paint.setAlpha(51);
-        canvas.drawText(value, 284-w, 247, paint);
+        canvas.drawText(value, offsetX+263-w, offsetY+247, paint);
         paint.setAlpha(255);
-        canvas.drawText(value, 281-w, 244, paint);
+        canvas.drawText(value, offsetX+260-w, offsetY+244, paint);
     }
 
     public static void drawWatchBattery(String value, Paint paint){
@@ -140,9 +141,9 @@ public class DrawUtils {
         paint.setLetterSpacing(0.05f);
         float w = paint.measureText(value);
         paint.setAlpha(51);
-        canvas.drawText(value, 284-w, 285, paint);
+        canvas.drawText(value, offsetX+263-w, offsetY+285, paint);
         paint.setAlpha(255);
-        canvas.drawText(value, 281-w, 282, paint);
+        canvas.drawText(value, offsetX+260-w, offsetY+282, paint);
 
     }
 
@@ -155,9 +156,9 @@ public class DrawUtils {
         paint.setLetterSpacing(0.05f);
 
         paint.setAlpha(51);
-        canvas.drawText(value, 72, 247, paint);
+        canvas.drawText(value, offsetX+72, offsetY+247, paint);
         paint.setAlpha(255);
-        canvas.drawText(value, 69, 244, paint);
+        canvas.drawText(value, offsetX+69, offsetY+244, paint);
     }
 
     public static void drawSunset(String value, Paint paint){
@@ -170,9 +171,9 @@ public class DrawUtils {
 
 
         paint.setAlpha(51);
-        canvas.drawText(value, 72, 285, paint);
+        canvas.drawText(value, offsetX+72, offsetY+285, paint);
         paint.setAlpha(255);
-        canvas.drawText(value, 69, 282, paint);
+        canvas.drawText(value, offsetX+69, offsetY+282, paint);
     }
 
     public static void drawUnread(int value, List<Bitmap> bells, Paint paint){
@@ -182,8 +183,51 @@ public class DrawUtils {
         paint.setLetterSpacing(0.05f);
         if (value>0){
             value = value>9?0:value;
-            canvas.drawBitmap(bells.get(value), 132, 192, paint);
+            canvas.drawBitmap(bells.get(value), offsetX+132, offsetX+192, paint);
         }
+
+    }
+
+    public static void drawShortcuts(String north, String south, String east, String west, Paint paint) {
+
+        paint.setTextSize(23);
+        paint.setLetterSpacing(-0.05f);
+
+        float w = paint.measureText(north);
+        paint.setColor(0xff000000);
+        paint.setStyle(Paint.Style.FILL);
+        if (w%2==1) w++;
+        canvas.drawRect(offsetX+width/2-(w+6)/2,offsetY+0,offsetX+width/2+(w+6)/2,offsetY+20,paint);
+        paint.setColor(0xffffffff);
+        canvas.drawText(north, offsetX+width/2-w/2, offsetY+22, paint);
+
+        w = paint.measureText(south);
+        paint.setColor(0xff000000);
+        paint.setStyle(Paint.Style.FILL);
+        if (w%2==1) w++;
+        canvas.drawRect(offsetX+width/2-(w+6)/2,offsetY+300,offsetX+width/2+(w+6)/2,offsetY+height,paint);
+        paint.setColor(0xffffffff);
+        canvas.drawText(south, offsetX+width/2-w/2, offsetY+314, paint);
+
+        canvas.rotate(-90,offsetX+width/2,offsetY+height/2);
+
+        w = paint.measureText(west);
+        paint.setColor(0xff000000);
+        paint.setStyle(Paint.Style.FILL);
+        if (w%2==1) w++;
+        canvas.drawRect(offsetX+width/2-(w+6)/2,offsetY+0,offsetX+width/2+(w+6)/2,offsetY+20,paint);
+        paint.setColor(0xffffffff);
+        canvas.drawText(west, offsetX+width/2-w/2, offsetY+22, paint);
+
+        w = paint.measureText(east);
+        paint.setColor(0xff000000);
+        paint.setStyle(Paint.Style.FILL);
+        if (w%2==1) w++;
+        canvas.drawRect(offsetX+width/2-(w+6)/2,offsetY+300,offsetX+width/2+(w+6)/2,offsetY+height,paint);
+        paint.setColor(0xffffffff);
+        canvas.drawText(east, offsetX+width/2-w/2, offsetY+314, paint);
+
+        canvas.rotate(90,offsetX+width/2,offsetY+height/2);
 
     }
 }

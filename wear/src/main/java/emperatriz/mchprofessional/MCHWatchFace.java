@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -21,6 +22,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.os.PowerManager;
+import android.provider.AlarmClock;
 import android.support.wearable.watchface.CanvasWatchFaceService;
 import android.support.wearable.watchface.WatchFaceStyle;
 import android.text.format.Time;
@@ -89,6 +91,7 @@ public class MCHWatchFace extends CanvasWatchFaceService implements SensorEventL
                 if (!Sys.getString("lastSteps","",getApplicationContext()).equals(sdf.format(new Date()))){
                     Sys.save("lastSteps", sdf.format(new Date()), MCHWatchFace.this);
                     todaySteps=steps-1;
+                    todaySteps = Math.max(todaySteps,0);
                     Sys.save("todaySteps", todaySteps, MCHWatchFace.this);
                 }
                 Sys.save("steps", steps, MCHWatchFace.this);
@@ -370,20 +373,45 @@ public class MCHWatchFace extends CanvasWatchFaceService implements SensorEventL
                 case TAP_TYPE_TAP:
                     // The user has completed the tap gesture.
                     mTapCount++;
-                    if (mTapCount % 2 == 0){
-                        if (x>236 && x<236+56){
-                            if (y>28 && y<28+56){
-//                                    pollSuntimes(true);
-//                                Toast.makeText(getApplicationContext(),"Suntimes requested",Toast.LENGTH_SHORT).show();
-                            }
+//                    Log.i("MCH Professional","Tap "+mTapCount+" "+x+","+y);
+                    if (Calendar.getInstance().getTimeInMillis()-Sys.getLong("lastTap", 0,getApplicationContext())<200) {
+                        if ((x > 80 && x < 240) && (y > 0 && y < 80)){ // NORTH
+                            launch(Sys.getWapp("north",Sys.NORTH_DEFAULT,getApplicationContext()).url);
+                        } else if ((x > 80 && x < 240) && (y > 240 && y < 320)){ // SOUTH
+                            launch(Sys.getWapp("south",Sys.SOUTH_DEFAULT,getApplicationContext()).url);
+                        } else if ((x > 240 && x < 320) && (y > 80 && y < 240)){ // EAST
+                            launch(Sys.getWapp("east",Sys.EAST_DEFAULT,getApplicationContext()).url);
+                        } else if ((x > 0 && x < 80) && (y > 80 && y < 240)){ // WEST
+                            launch(Sys.getWapp("west",Sys.WEST_DEFAULT,getApplicationContext()).url);
                         }
-
                     }
-
+                    Sys.save("lastTap",Calendar.getInstance().getTimeInMillis(),getApplicationContext());
 
                     break;
             }
             invalidate();
+        }
+
+        public void launch (String url){
+//            Log.i("MCH Professional","launch "+url);
+            if (url.equals(Sys.TIMER)){
+                Intent i= new Intent(AlarmClock.ACTION_SET_TIMER);
+                i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED);
+                getApplicationContext().startActivity(i);
+            } else  if (url.equals(Sys.ALARM)){
+                Intent i= new Intent(AlarmClock.ACTION_SET_ALARM);
+                i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED);
+                getApplicationContext().startActivity(i);
+            } else {
+                PackageManager pm = getPackageManager();
+                Intent intent = pm.getLaunchIntentForPackage(url);
+                if (intent!=null){
+                    startActivity(intent);
+                }else{
+                    Toast.makeText(getApplicationContext(),";_;",Toast.LENGTH_SHORT).show();
+                }
+
+            }
         }
 
         @Override
@@ -401,17 +429,20 @@ public class MCHWatchFace extends CanvasWatchFaceService implements SensorEventL
             DrawUtils.canvas = canvas;
             DrawUtils.isInAmbientMode = isInAmbientMode();
             DrawUtils.color = Sys.getInt("color", 0xff33ffff, getApplicationContext());
+            DrawUtils.offsetX=0;
+            DrawUtils.offsetY=0;
 
             int notifications = getNotificationCount();
             SharedPreferences preferences = getSharedPreferences("mchPro", MODE_PRIVATE);
-            String phoneBattery = Sys.getString("battery","81",getApplicationContext()) + "%";
+            String phoneBattery = Sys.getString("battery","81",getApplicationContext()) + "";
 
             Intent batteryIntent = getApplicationContext().registerReceiver(null, new IntentFilter(Intent.ACTION_BATTERY_CHANGED));
             int level = batteryIntent.getIntExtra(BatteryManager.EXTRA_LEVEL, -1);
             int scale = batteryIntent.getIntExtra(BatteryManager.EXTRA_SCALE, -1);
-            String watchBattery = Math.round(level*100 / (float)scale)+"%";
+            String watchBattery = Math.round(level*100 / (float)scale)+"";
             todaySteps = Sys.getInt("todaySteps", 0, MCHWatchFace.this);
             steps = Sys.getInt("steps", 0, MCHWatchFace.this);
+
 
             DrawUtils.drawBackground(mBackgroundBitmap, mBackgroundBitmapAmb, mBackgroundPaint, whitePaint);
             DrawUtils.drawDate(restPaint);
@@ -423,6 +454,10 @@ public class MCHWatchFace extends CanvasWatchFaceService implements SensorEventL
             DrawUtils.drawSunrise(Sys.getString("sunrise","--:--",getApplicationContext()), restPaint);
             DrawUtils.drawSunset(Sys.getString("sunset","--:--",getApplicationContext()), restPaint);
             DrawUtils.drawUnread(notifications, bells, restPaint);
+            DrawUtils.drawShortcuts(Sys.getWapp("north",Sys.NORTH_DEFAULT,getApplicationContext()).name,
+                                    Sys.getWapp("south",Sys.SOUTH_DEFAULT,getApplicationContext()).name,
+                                    Sys.getWapp("east",Sys.EAST_DEFAULT,getApplicationContext()).name,
+                                    Sys.getWapp("west",Sys.WEST_DEFAULT,getApplicationContext()).name, restPaint);
 
         }
 

@@ -1,11 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              xmlns:app="http://schemas.android.com/apk/res-auto"
-              xmlns:tools="http://schemas.android.com/tools"
               android:layout_width="match_parent"
               android:layout_height="match_parent"
               android:orientation="vertical"
-              tools:context="emperatriz.mchprofessional.MainActivity">
+
+    >
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -15,64 +14,82 @@
         android:orientation="vertical">
     </LinearLayout>
 
-    <android.support.design.widget.AppBarLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:theme="@style/AppTheme.AppBarOverlay">
-
-        <android.support.v7.widget.Toolbar
-            android:id="@+id/toolbar"
-            android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            android:background="?attr/colorPrimary"
-            app:popupTheme="@style/AppTheme.PopupOverlay"/>
-
-    </android.support.design.widget.AppBarLayout>
-
-
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:background="#000000"
-        android:orientation="vertical"
-        android:padding="20dp">
+        android:gravity="center"
+        android:background="@color/colorPrimary"
+        android:orientation="horizontal"
+        android:paddingTop="20dp"
+        android:paddingBottom="20dp">
+
+        <ImageView
+            android:layout_width="20dp"
+            android:layout_height="200dp"
+            android:src="@drawable/title"
+            android:scaleType="centerInside"
+            android:layout_marginRight="60dp"
+            android:id="@+id/imageView"/>
 
         <emperatriz.mchprofessional.CanvasView
             android:id="@+id/view"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"/>
+            android:layout_weight="1"
+            android:gravity="center"/>
+
+        <ImageView
+            android:layout_width="20dp"
+            android:layout_height="200dp"
+            android:src="@drawable/title2"
+            android:scaleType="centerInside"
+            android:layout_marginLeft="60dp"
+            android:id="@+id/imageView2"/>
 
     </LinearLayout>
-
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/fab"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="top|end"
+        android:layout_marginTop="-28dp"
+        android:layout_marginEnd="10dp"
+        android:src="@drawable/sendtowatch" />
 
     <TabHost
         android:id="@+id/tab_host"
+        android:layout_marginTop="-28dp"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <LinearLayout
+        <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            >
 
             <TabWidget
                 android:id="@android:id/tabs"
+                android:layout_alignParentBottom="true"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"/>
+                android:layout_height="wrap_content"
+                android:layout_weight="0"
+                />
+
 
             <FrameLayout
                 android:id="@android:id/tabcontent"
+                android:layout_alignParentTop="true"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                >
 
                 <LinearLayout
                     android:id="@+id/tab_one_container"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:orientation="vertical"
                     android:layout_gravity="center_horizontal"
+                    android:orientation="vertical"
                     >
 
                     <com.larswerkman.holocolorpicker.ColorPicker
@@ -88,16 +105,87 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_horizontal"
                         />
-                    </LinearLayout>
+                </LinearLayout>
 
                 <LinearLayout
                     android:id="@+id/tab_two_container"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:orientation="vertical"
-                    />
+                    android:layout_marginTop="15dp"
+                    android:padding="10dp"
+                    >
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:gravity="center_horizontal"
+                        >
+
+
+                        <Button
+                            android:id="@+id/appN"
+                            android:layout_width="320px"
+                            android:layout_height="wrap_content"
+                            android:textSize="10dp"
+                            android:text="AppN"
+                            />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="320px"
+                        android:orientation="horizontal"
+                        android:gravity="center_horizontal"
+                        >
+
+
+                        <emperatriz.mchprofessional.VerticalButton
+                            android:id="@+id/appW"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:textSize="10dp"
+                            android:text="AppW"/>
+
+                        <ImageButton
+                            android:id="@+id/wapps"
+                            android:layout_width="320px"
+                            android:layout_height="320px"
+                            android:background="@android:color/transparent"
+                            android:src="@drawable/update"
+                            android:scaleType="fitXY"
+                            />
+
+                        <emperatriz.mchprofessional.VerticalButton
+                            android:id="@+id/appE"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:textSize="10dp"
+                            android:text="AppE"
+                            />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:gravity="center_horizontal"
+                        >
+
+                        <Button
+                            android:id="@+id/appS"
+                            android:layout_width="320px"
+                            android:layout_height="wrap_content"
+                            android:textSize="10dp"
+                            android:text="AppS"
+                            />
+
+
+                    </LinearLayout>
+                </LinearLayout>
             </FrameLayout>
-        </LinearLayout>
+        </RelativeLayout>
     </TabHost>
 
 

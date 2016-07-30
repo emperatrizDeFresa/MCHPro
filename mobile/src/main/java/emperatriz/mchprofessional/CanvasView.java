@@ -31,10 +31,14 @@ public class CanvasView extends View {
 
     Context context;
     Paint timePaint,restPaint,mBackgroundPaint;
+    MainActivity ma;
+
+
 
     public CanvasView(Context c, AttributeSet attrs) {
         super(c, attrs);
         context = c;
+
 
         Typeface font1 = Typeface.createFromAsset(c.getAssets(), "fonts/SF Square Head.ttf");
         Typeface font2 = Typeface.createFromAsset(c.getAssets(), "fonts/Square.ttf");
@@ -51,13 +55,19 @@ public class CanvasView extends View {
         mBackgroundPaint.setColor(backColor);
 
         DrawUtils.mTime = new Time();
+        DrawUtils.offsetX=90;
+        DrawUtils.offsetY=147;
         update.run();
+    }
+
+    public void setMainActivity(MainActivity ma){
+        this.ma=ma;
     }
 
     @Override
     public void onMeasure (int widthMeasureSpec, int heightMeasureSpec){
         super.onMeasure(widthMeasureSpec, heightMeasureSpec);
-        setMeasuredDimension(320, 320);
+        setMeasuredDimension(501, 660);
     }
 
     @Override
@@ -83,9 +93,13 @@ public class CanvasView extends View {
         Bitmap back = BitmapFactory.decodeResource(getResources(), emperatriz.common.R.drawable.back);
         back =  Bitmap.createScaledBitmap(back,320,320, true);
 
+        Bitmap swr = BitmapFactory.decodeResource(getResources(), R.drawable.swr50);
+        swr =  Bitmap.createScaledBitmap(swr,501,660, true);
+
         mBackgroundPaint.setColor(backColor);
-        canvas.drawRect(0, 0, width, height,mBackgroundPaint );
-        canvas.drawBitmap(back,0,0,null);
+        canvas.drawBitmap(swr,0,0,null);
+        canvas.drawRect(DrawUtils.offsetX+0, DrawUtils.offsetY+0, DrawUtils.offsetX+width, DrawUtils.offsetY+height,mBackgroundPaint );
+        canvas.drawBitmap(back,DrawUtils.offsetX+0,DrawUtils.offsetY+0,null);
 
         DrawUtils.mTime.setToNow();
         DrawUtils.now = System.currentTimeMillis();
@@ -99,10 +113,11 @@ public class CanvasView extends View {
         DrawUtils.drawHHmm(timePaint);
         DrawUtils.drawSecs(timePaint);
         DrawUtils.drawSteps("12324", restPaint);
-        DrawUtils.drawWatchBattery("58%", restPaint);
-        DrawUtils.drawPhoneBattery("79%", restPaint);
+        DrawUtils.drawWatchBattery("58", restPaint);
+        DrawUtils.drawPhoneBattery("79", restPaint);
         DrawUtils.drawSunrise("7:11", restPaint);
         DrawUtils.drawSunset("22:06", restPaint);
+        DrawUtils.drawShortcuts(ma.north.name,ma.south.name,ma.east.name,ma.west.name, restPaint);
     }
 
 
