@@ -147,14 +147,12 @@
                             android:layout_height="match_parent"
                             android:textSize="10dp"
                             android:text="AppW"/>
-
-                        <ImageButton
-                            android:id="@+id/wapps"
+                        <LinearLayout
                             android:layout_width="320px"
                             android:layout_height="320px"
                             android:background="@android:color/transparent"
-                            android:src="@drawable/update"
-                            android:scaleType="fitXY"
+                            android:orientation="horizontal"
+                            android:gravity="center_horizontal"
                             />
 
                         <emperatriz.mchprofessional.VerticalButton

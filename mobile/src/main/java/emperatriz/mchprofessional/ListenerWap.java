@@ -31,7 +31,7 @@ public class ListenerWap extends WearableListenerService{
     @Override
     public void onMessageReceived(MessageEvent messageEvent) {
         if (messageEvent.getPath().equals(Sys.WEAR_APPS)) {
-            final String message = new String(messageEvent.getData());
+            final String message = new String(messageEvent.getData())+getApplicationContext().getResources().getString(R.string.custom)+", ;";
             Sys.save("wapps",message,this);
         }
     }

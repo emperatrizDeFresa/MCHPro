@@ -1,5 +1,6 @@
 package emperatriz.common;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
@@ -26,14 +27,15 @@ public class Sys {
     public static final String COLOR_PATH = "/mch/color";
     public static final String WEAR_APPS = "/mch/wapps";
     public static final String WEAR_URLS = "/mch/wurls";
+    public static final String WEAR_BADGE = "/mch/badge";
 
     public static String TIMER = "com.android.timer";
     public static String ALARM = "com.android.alarm";
 
-    public static WappDto NORTH_DEFAULT = new WappDto("TIMER",TIMER);
-    public static WappDto SOUTH_DEFAULT = new WappDto("CALCULATOR","com.google.android.calculator");
-    public static WappDto EAST_DEFAULT = new WappDto("LIGHT","com.google.android.clockwork.flashlight");
-    public static WappDto WEST_DEFAULT = new WappDto("ALARM",ALARM);
+    public static WappDto NORTH_DEFAULT = new WappDto("Timer",TIMER);
+    public static WappDto SOUTH_DEFAULT = new WappDto("Calculator","com.google.android.calculator");
+    public static WappDto EAST_DEFAULT = new WappDto("Light","com.google.android.clockwork.flashlight");
+    public static WappDto WEST_DEFAULT = new WappDto("Alarm",ALARM);
 
 
 
@@ -98,7 +100,7 @@ public class Sys {
     }
 
     public static String getInstalledApps(Context ctx) {
-        String ret="TIMER,"+TIMER+";ALARM,"+ALARM+";";
+        String ret="Timer,"+TIMER+";Alarm,"+ALARM+";";
         List<PackageInfo> packs = ctx.getPackageManager().getInstalledPackages(0);
         for(int i=0;i<packs.size();i++) {
 
@@ -127,6 +129,23 @@ public class Sys {
 
         }
         return ret;
+    }
+
+    private ProgressDialog pd;
+    public void showDialog(String text, Context context) {
+        pd = new ProgressDialog(context);
+        pd.setIndeterminate(true);
+        pd.setCancelable(false);
+        pd.setMessage(text);
+        pd.show();
+    }
+
+    public void hideDialog(Context context) {
+        try {
+            if (pd.isShowing())
+                pd.dismiss();
+        } catch (Exception ex) {
+        }
     }
 
 

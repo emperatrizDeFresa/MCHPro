@@ -162,6 +162,13 @@ public class MCHWatchFace extends CanvasWatchFaceService implements SensorEventL
         Node wearNode;
         private Bitmap mBackgroundBitmap;
         private Bitmap mBackgroundBitmapAmb;
+        private List<Bitmap> badges;
+        private Bitmap badge;
+        private Bitmap badge1;
+        private Bitmap badge2;
+        private Bitmap badge3;
+        private Bitmap badge4;
+        private Bitmap badge5;
         private List<Bitmap> bells;
         private Bitmap bell;
         private Bitmap bell1;
@@ -247,6 +254,25 @@ public class MCHWatchFace extends CanvasWatchFaceService implements SensorEventL
             bell9 = Bitmap.createScaledBitmap(bell9,(int) (bell9.getWidth() * scale),(int) (bell9.getHeight() * scale), true);
             bells.add(bell9);
 
+            badges = new ArrayList<Bitmap>();
+            badge = BitmapFactory.decodeResource(getResources(), emperatriz.common.R.drawable.badge);
+            badge = Bitmap.createScaledBitmap(badge,(int) (badge.getWidth() * scale),(int) (badge.getHeight() * scale), true);
+            badges.add(badge);
+            badge1 = BitmapFactory.decodeResource(getResources(), emperatriz.common.R.drawable.badge1);
+            badge1 = Bitmap.createScaledBitmap(badge1,(int) (badge1.getWidth() * scale),(int) (badge1.getHeight() * scale), true);
+            badges.add(badge1);
+            badge2 = BitmapFactory.decodeResource(getResources(), emperatriz.common.R.drawable.badge2);
+            badge2 = Bitmap.createScaledBitmap(badge2,(int) (badge2.getWidth() * scale),(int) (badge2.getHeight() * scale), true);
+            badges.add(badge2);
+            badge3 = BitmapFactory.decodeResource(getResources(), emperatriz.common.R.drawable.badge3);
+            badge3 = Bitmap.createScaledBitmap(badge3,(int) (badge3.getWidth() * scale),(int) (badge3.getHeight() * scale), true);
+            badges.add(badge3);
+            badge4 = BitmapFactory.decodeResource(getResources(), emperatriz.common.R.drawable.badge4);
+            badge4 = Bitmap.createScaledBitmap(badge4,(int) (badge4.getWidth() * scale),(int) (badge4.getHeight() * scale), true);
+            badges.add(badge4);
+            badge5 = BitmapFactory.decodeResource(getResources(), emperatriz.common.R.drawable.badge5);
+            badge5 = Bitmap.createScaledBitmap(badge5,(int) (badge5.getWidth() * scale),(int) (badge5.getHeight() * scale), true);
+            badges.add(badge5);
 
             mGoogleApiClient = new GoogleApiClient.Builder(getApplicationContext())
                     .addApi(Wearable.API)
@@ -444,7 +470,7 @@ public class MCHWatchFace extends CanvasWatchFaceService implements SensorEventL
             steps = Sys.getInt("steps", 0, MCHWatchFace.this);
 
 
-            DrawUtils.drawBackground(mBackgroundBitmap, mBackgroundBitmapAmb, mBackgroundPaint, whitePaint);
+            DrawUtils.drawBackground(mBackgroundBitmap, mBackgroundBitmapAmb, badges.get(Sys.getInt("badge",0,getApplicationContext())),mBackgroundPaint, whitePaint);
             DrawUtils.drawDate(restPaint);
             DrawUtils.drawHHmm(timePaint);
             DrawUtils.drawSecs(timePaint);

@@ -1,4 +1,12 @@
 <resources>
     <string name="app_name">MCH Professional</string>
     <string name="title_activity_main">MCH Professional</string>
+    <string name="gettingWapps">Updating watch apps</string>
+    <string name="ok">Ok</string>
+    <string name="getWapps">Refresh apps</string>
+    <string name="notConnected">Error, not connected!</string>
+    <string name="shortcuts">Shortcuts</string>
+    <string name="backcolor">Background color</string>
+    <string name="custom">Custom</string>
+    <string name="hint">Type the name of package</string>
 </resources>

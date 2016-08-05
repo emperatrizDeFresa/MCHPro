@@ -16,6 +16,8 @@ import android.location.LocationProvider;
 import android.os.AsyncTask;
 import android.os.BatteryManager;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -29,6 +31,8 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.animation.BounceInterpolator;
+import android.view.animation.LinearInterpolator;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ImageButton;
@@ -63,9 +67,8 @@ import emperatriz.common.WappDto;
 public class MainActivity extends AppCompatActivity  implements GoogleApiClient.ConnectionCallbacks, View.OnClickListener, ColorPicker.OnColorChangedListener, ColorPicker.OnColorSelectedListener {
 
     private GoogleApiClient mGoogleApiClient;
-    int backColor;
+    int backColor,badgeIndex;
     Button  appN, appE, appW, appS;
-    ImageButton wapps;
     Spinner spin;
     TextView name, url;
     FloatingActionButton fab;
@@ -86,13 +89,60 @@ public class MainActivity extends AppCompatActivity  implements GoogleApiClient.
         //setSupportActionBar(toolbar);
         fab = (FloatingActionButton)findViewById(R.id.fab);
         fab.setOnClickListener(this);
+        fab.animate().scaleX(0f).scaleY(0f).setDuration(0).setInterpolator(new BounceInterpolator()).start();
+        fab.setAlpha(0f);
+        Handler handler = new Handler(Looper.getMainLooper());
+        Runnable update = new Runnable(){
+            public void run(){
+
+                fab.setAlpha(1f);
+                fab.animate().scaleX(1f).scaleY(1f).setDuration(1400).setInterpolator(new BounceInterpolator()).start();
+            }
+        };
+        handler.postDelayed(update,1000);
+
 
 
         cv = (CanvasView) findViewById(R.id.view);
         cv.setMainActivity(this);
         cv.setColor(Sys.getInt("color", 0xff00dddd, MainActivity.this));
+        final ArrayList<String> badgesList = new ArrayList<String>();
+        badgesList.add("MCH Professional");
+        badgesList.add("Galactica");
+        badgesList.add("Star Trek");
+        badgesList.add("Star Wars");
+        badgesList.add("Android");
+        badgesList.add("Candón");
 
+        cv.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                new AlertDialog.Builder(MainActivity.this)
+                        .setAdapter(new BadgesAdapter(MainActivity.this,R.layout.badgerow,badgesList), new DialogInterface.OnClickListener() {
 
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                cv.setBadge(which);
+                                badgeIndex=which;
+                                dialog.dismiss();
+                            }
+                        })
+//                        .setPositiveButton(getResources().getString(R.string.ok), new DialogInterface.OnClickListener() {
+//
+//                            @Override
+//                            public void onClick(DialogInterface dialog, int which) {
+//
+//                            }
+//                        })
+                        .setCancelable(true)
+                        .show();
+                return false;
+            }
+        });
+        backColor = Sys.getInt("color", 0xff00dddd, MainActivity.this);
+        badgeIndex = Sys.getInt("badge", 0, MainActivity.this);
+
+        cv.setBadge(badgeIndex);
 
         if (ContextCompat.checkSelfPermission( this, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED ||
             ContextCompat.checkSelfPermission( this, android.Manifest.permission.INTERNET) != PackageManager.PERMISSION_GRANTED    ) {
@@ -103,14 +153,14 @@ public class MainActivity extends AppCompatActivity  implements GoogleApiClient.
         TabHost host = (TabHost)findViewById(R.id.tab_host);
         host.setup();
 
-        TabHost.TabSpec spec = host.newTabSpec("Color de fondo");
+        TabHost.TabSpec spec = host.newTabSpec(getResources().getString(R.string.backcolor));
         spec.setContent(R.id.tab_one_container);
-        spec.setIndicator("Color de fondo");
+        spec.setIndicator(getResources().getString(R.string.backcolor));
         host.addTab(spec);
 
-        spec = host.newTabSpec("Accesos directos");
+        spec = host.newTabSpec(getResources().getString(R.string.shortcuts));
         spec.setContent(R.id.tab_two_container);
-        spec.setIndicator("Accesos directos");
+        spec.setIndicator(getResources().getString(R.string.shortcuts));
         host.addTab(spec);
 
 
@@ -129,8 +179,6 @@ public class MainActivity extends AppCompatActivity  implements GoogleApiClient.
         east = Sys.getWapp("east",Sys.EAST_DEFAULT,this);
         west = Sys.getWapp("west",Sys.WEST_DEFAULT,this);
 
-        wapps = (ImageButton) findViewById(R.id.wapps);
-        wapps.setOnClickListener(this);
         appN = (Button)findViewById(R.id.appN);
         appN.setText(north.name);
         appN.setOnClickListener(this);
@@ -144,7 +192,11 @@ public class MainActivity extends AppCompatActivity  implements GoogleApiClient.
         appW.setText(west.name);
         appW.setOnClickListener(this);
 
-
+        ArrayList<WappDto> wappsArray = Sys.parseWapps(Sys.getString("wapps","",this));
+        if (wappsArray.size()==0){
+            UpdateWapps uw = new UpdateWapps();
+            uw.execute();
+        }
 
     }
 
@@ -165,6 +217,8 @@ public class MainActivity extends AppCompatActivity  implements GoogleApiClient.
     @Override
     public void onConnected(Bundle bundle) {
         Sys.save("color",backColor,MainActivity.this);
+        sendMessage(Sys.WEAR_BADGE,badgeIndex+"",true);
+        Sys.save("badge",badgeIndex,MainActivity.this);
         int c = Integer.parseInt(backColor+"");
         sendMessage(Sys.COLOR_PATH,backColor+"",false);
         String wurls = "";
@@ -199,39 +253,30 @@ public class MainActivity extends AppCompatActivity  implements GoogleApiClient.
                     .addOnConnectionFailedListener(new GoogleApiClient.OnConnectionFailedListener() {
                         @Override
                         public void onConnectionFailed(ConnectionResult connectionResult) {
-                            Toast.makeText(getApplicationContext(), "Error, not connected!", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getApplicationContext(), getResources().getString(R.string.notConnected), Toast.LENGTH_SHORT).show();
                         }
                     })
                     .build();
             mGoogleApiClient.connect();
-        } else if (v==wapps){
-            mGoogleApiClient = new GoogleApiClient.Builder(getApplicationContext())
-                    .addApi(Wearable.API)
-                    .addConnectionCallbacks(new GoogleApiClient.ConnectionCallbacks() {
-                        @Override
-                        public void onConnected(@Nullable Bundle bundle) {
-                            sendMessage(Sys.WEAR_APPS,"",true);
-                        }
-
-                        @Override
-                        public void onConnectionSuspended(int i) {
-
-                        }
-                    })
-                    .build();
-            mGoogleApiClient.connect();
-
         } else if (v==appN){
             AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this, R.style.MyAlertDialogStyle);
             LayoutInflater inflater = this.getLayoutInflater();
             View dialogView = inflater.inflate(R.layout.wurl, null);
             builder.setView(dialogView);
             AlertDialog alertDialog = builder.create();
-            alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, "OK", new DialogInterface.OnClickListener() {
+            alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, getResources().getString(R.string.ok), new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
-                    north = new WappDto(name.getText().toString().toUpperCase(),url.getText().toString());
+                    north = new WappDto(name.getText().toString().toUpperCase(),url.getText().toString().replace(" ",""));
                     appN.setText(north.name);
+                }
+            });
+            alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, getResources().getString(R.string.getWapps), new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.dismiss();
+                    UpdateWapps uw = new UpdateWapps();
+                    uw.execute();
                 }
             });
             alertDialog.show();
@@ -240,6 +285,7 @@ public class MainActivity extends AppCompatActivity  implements GoogleApiClient.
             url.setEnabled(false);
             spin = (Spinner) dialogView.findViewById(R.id.spinner);
             ArrayList<WappDto> wappsArray = Sys.parseWapps(Sys.getString("wapps","",this));
+
             spin.setAdapter(new WappSpinnerAdapter(this,R.layout.wapprow,wappsArray));
             spin.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                 @Override
@@ -250,7 +296,17 @@ public class MainActivity extends AppCompatActivity  implements GoogleApiClient.
                     }else{
                         name.setText(north.name);
                     }
-                    url.setText(dto.url);
+                    if (dto.name.equals(getApplicationContext().getResources().getString(R.string.custom))){
+                        url.setText(dto.url.replace(" ",""));
+                        url.setEnabled(true);
+                        url.setHint(getApplicationContext().getResources().getString(R.string.hint));
+                        url.setHintTextColor(0xff999999);
+                    }else{
+                        url.setEnabled(false);
+                        url.setHint("");
+                        url.setText(dto.url);
+
+                    }
                 }
 
                 @Override
@@ -258,18 +314,31 @@ public class MainActivity extends AppCompatActivity  implements GoogleApiClient.
 
                 }
             });
-            spin.setSelection(wappsArray.indexOf(north));
+            if (north.name.equals(getResources().getString(R.string.custom).toUpperCase())){
+                wappsArray.get(wappsArray.size()-1).url = north.url;
+                spin.setSelection(wappsArray.size()-1);
+            }else{
+                spin.setSelection(wappsArray.indexOf(north));
+            }
         }else if (v==appS){
             AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this, R.style.MyAlertDialogStyle);
             LayoutInflater inflater = this.getLayoutInflater();
             View dialogView = inflater.inflate(R.layout.wurl, null);
             builder.setView(dialogView);
             AlertDialog alertDialog = builder.create();
-            alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, "OK", new DialogInterface.OnClickListener() {
+            alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, getResources().getString(R.string.ok), new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
-                    south = new WappDto(name.getText().toString().toUpperCase(),url.getText().toString());
+                    south = new WappDto(name.getText().toString().toUpperCase(),url.getText().toString().replace(" ",""));
                     appS.setText(south.name);
+                }
+            });
+            alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, getResources().getString(R.string.getWapps), new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.dismiss();
+                    UpdateWapps uw = new UpdateWapps();
+                    uw.execute();
                 }
             });
             alertDialog.show();
@@ -288,7 +357,17 @@ public class MainActivity extends AppCompatActivity  implements GoogleApiClient.
                     }else{
                         name.setText(south.name);
                     }
-                    url.setText(dto.url);
+                    if (dto.name.equals(getApplicationContext().getResources().getString(R.string.custom))){
+                        url.setText(dto.url.replace(" ",""));
+                        url.setEnabled(true);
+                        url.setHint(getApplicationContext().getResources().getString(R.string.hint));
+                        url.setHintTextColor(0xff999999);
+                    }else{
+                        url.setEnabled(false);
+                        url.setHint("");
+                        url.setText(dto.url);
+
+                    }
                 }
 
                 @Override
@@ -296,18 +375,31 @@ public class MainActivity extends AppCompatActivity  implements GoogleApiClient.
 
                 }
             });
-            spin.setSelection(wappsArray.indexOf(south));
+            if (south.name.equals(getResources().getString(R.string.custom).toUpperCase())){
+                wappsArray.get(wappsArray.size()-1).url = south.url;
+                spin.setSelection(wappsArray.size()-1);
+            }else{
+                spin.setSelection(wappsArray.indexOf(south));
+            }
         }else if (v==appE){
             AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this, R.style.MyAlertDialogStyle);
             LayoutInflater inflater = this.getLayoutInflater();
             View dialogView = inflater.inflate(R.layout.wurl, null);
             builder.setView(dialogView);
             AlertDialog alertDialog = builder.create();
-            alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, "OK", new DialogInterface.OnClickListener() {
+            alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, getResources().getString(R.string.ok), new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
-                    east = new WappDto(name.getText().toString().toUpperCase(),url.getText().toString());
+                    east = new WappDto(name.getText().toString().toUpperCase(),url.getText().toString().replace(" ",""));
                     appE.setText(east.name);
+                }
+            });
+            alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, getResources().getString(R.string.getWapps), new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.dismiss();
+                    UpdateWapps uw = new UpdateWapps();
+                    uw.execute();
                 }
             });
             alertDialog.show();
@@ -326,7 +418,17 @@ public class MainActivity extends AppCompatActivity  implements GoogleApiClient.
                     }else{
                         name.setText(east.name);
                     }
-                    url.setText(dto.url);
+                    if (dto.name.equals(getApplicationContext().getResources().getString(R.string.custom))){
+                        url.setText(dto.url.replace(" ",""));
+                        url.setEnabled(true);
+                        url.setHint(getApplicationContext().getResources().getString(R.string.hint));
+                        url.setHintTextColor(0xff999999);
+                    }else{
+                        url.setEnabled(false);
+                        url.setHint("");
+                        url.setText(dto.url);
+
+                    }
                 }
 
                 @Override
@@ -334,18 +436,31 @@ public class MainActivity extends AppCompatActivity  implements GoogleApiClient.
 
                 }
             });
-            spin.setSelection(wappsArray.indexOf(east));
+            if (east.name.equals(getResources().getString(R.string.custom).toUpperCase())){
+                wappsArray.get(wappsArray.size()-1).url = east.url;
+                spin.setSelection(wappsArray.size()-1);
+            }else{
+                spin.setSelection(wappsArray.indexOf(east));
+            }
         }else if (v==appW){
             AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this, R.style.MyAlertDialogStyle);
             LayoutInflater inflater = this.getLayoutInflater();
             View dialogView = inflater.inflate(R.layout.wurl, null);
             builder.setView(dialogView);
             AlertDialog alertDialog = builder.create();
-            alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, "OK", new DialogInterface.OnClickListener() {
+            alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, getResources().getString(R.string.ok), new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
-                    west = new WappDto(name.getText().toString().toUpperCase(),url.getText().toString());
+                    west = new WappDto(name.getText().toString().toUpperCase(),url.getText().toString().replace(" ",""));
                     appW.setText(west.name);
+                }
+            });
+            alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, getResources().getString(R.string.getWapps), new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.dismiss();
+                    UpdateWapps uw = new UpdateWapps();
+                    uw.execute();
                 }
             });
             alertDialog.show();
@@ -364,7 +479,17 @@ public class MainActivity extends AppCompatActivity  implements GoogleApiClient.
                     }else{
                         name.setText(west.name);
                     }
-                    url.setText(dto.url);
+                    if (dto.name.equals(getApplicationContext().getResources().getString(R.string.custom))){
+                        url.setText(dto.url.replace(" ",""));
+                        url.setEnabled(true);
+                        url.setHint(getApplicationContext().getResources().getString(R.string.hint));
+                        url.setHintTextColor(0xff999999);
+                    }else{
+                        url.setEnabled(false);
+                        url.setHint("");
+                        url.setText(dto.url);
+
+                    }
                 }
 
                 @Override
@@ -372,7 +497,13 @@ public class MainActivity extends AppCompatActivity  implements GoogleApiClient.
 
                 }
             });
-            spin.setSelection(wappsArray.indexOf(west));
+            if (west.name.equals(getResources().getString(R.string.custom).toUpperCase())){
+                wappsArray.get(wappsArray.size()-1).url = west.url;
+                spin.setSelection(wappsArray.size()-1);
+            }else{
+                spin.setSelection(wappsArray.indexOf(west));
+            }
+
         }
 
     }
@@ -382,13 +513,47 @@ public class MainActivity extends AppCompatActivity  implements GoogleApiClient.
 
     @Override
     public void onColorChanged(int color) {
-//        backColor=color;
-//        cv.setColor(color);
+        backColor=color;
+        cv.setColor(color);
     }
 
     @Override
     public void onColorSelected(int color) {
-        backColor=color;
-        cv.setColor(color);
+//        backColor=color;
+//        cv.setColor(color);
+    }
+
+    class UpdateWapps extends AsyncTask<Void, Integer, String>
+    {
+        @Override
+        protected void onPreExecute (){
+            Toast.makeText(MainActivity.this,getApplication().getResources().getString(R.string.gettingWapps), Toast.LENGTH_SHORT).show();
+            //Sys.init().showDialog(getApplication().getResources().getString(R.string.gettingWapps),MainActivity.this);
+        }
+
+        @Override
+        protected String doInBackground(Void...arg0) {
+            mGoogleApiClient = new GoogleApiClient.Builder(getApplicationContext())
+                    .addApi(Wearable.API)
+                    .addConnectionCallbacks(new GoogleApiClient.ConnectionCallbacks() {
+                        @Override
+                        public void onConnected(@Nullable Bundle bundle) {
+                            sendMessage(Sys.WEAR_APPS,"",true);
+                        }
+
+                        @Override
+                        public void onConnectionSuspended(int i) {
+
+                        }
+                    })
+                    .build();
+            mGoogleApiClient.connect();
+            return "";
+        }
+
+        @Override
+        protected void onPostExecute(String result) {
+            //Sys.init().hideDialog(MainActivity.this);
+        }
     }
 }

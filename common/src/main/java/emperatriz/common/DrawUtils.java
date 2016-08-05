@@ -19,7 +19,7 @@ public class DrawUtils {
     public static long now;
     public static int offsetX,offsetY;
 
-    public static void drawBackground(Bitmap mBackgroundBitmap, Bitmap mBackgroundBitmapAmb,Paint mBackgroundPaint, Paint whitePaint){
+    public static void drawBackground(Bitmap mBackgroundBitmap, Bitmap mBackgroundBitmapAmb,Bitmap badge, Paint mBackgroundPaint, Paint whitePaint){
         mBackgroundPaint.setColor(color);
         if (isInAmbientMode) {
             canvas.drawRect(offsetX+0, offsetY+0, width, height, whitePaint);
@@ -28,7 +28,7 @@ public class DrawUtils {
             canvas.drawRect(offsetX+0, offsetY+0, width, height, mBackgroundPaint);
             canvas.drawBitmap(mBackgroundBitmap, offsetX+0, offsetY+0, mBackgroundPaint);
         }
-
+        canvas.drawBitmap(badge, offsetX+240, offsetY+32, mBackgroundPaint);
 
     }
 
@@ -39,7 +39,9 @@ public class DrawUtils {
 
 
         paint.setTextSize(24);
-//        paint.setLetterSpacing(-0.05f);
+        paint.setLetterSpacing(0.05f);
+        float l1 = paint.measureText(mTime.format("%A"));
+        if (l1>165) paint.setLetterSpacing(-0.05f);
 
         paint.setAlpha(51);
         canvas.drawText(mTime.format("%A"), offsetX+42, offsetY+57, paint);
@@ -52,6 +54,11 @@ public class DrawUtils {
         if (date.startsWith("0")){
             date = date.substring(1);
         }
+
+        paint.setLetterSpacing(0.05f);
+        float l2 = paint.measureText(date);
+        if (l2>171) paint.setLetterSpacing(-0.05f);
+
         canvas.drawText(date, offsetX+42, offsetY+82, paint);
 //        canvas.drawText("23 SEPTIEMBRE", 42, 82, paint);
         paint.setAlpha(255);

@@ -19,6 +19,8 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
 
+import java.util.ArrayList;
+
 import emperatriz.common.DrawUtils;
 import emperatriz.common.Sys;
 
@@ -27,18 +29,44 @@ public class CanvasView extends View {
     public int width=320;
     public int height=320;
 
-    int backColor;
+    int backColor,badgeIndex=0;
 
     Context context;
     Paint timePaint,restPaint,mBackgroundPaint;
     MainActivity ma;
-
-
+    Bitmap back, swr;
+    ArrayList<Bitmap> badges;
+    Bitmap badge, badge1, badge2, badge3, badge4,badge5;
 
     public CanvasView(Context c, AttributeSet attrs) {
         super(c, attrs);
         context = c;
 
+        back = BitmapFactory.decodeResource(getResources(), emperatriz.common.R.drawable.back);
+        back =  Bitmap.createScaledBitmap(back,320,320, true);
+
+        swr = BitmapFactory.decodeResource(getResources(), R.drawable.swr50);
+        swr =  Bitmap.createScaledBitmap(swr,501,660, true);
+
+        badges = new ArrayList<Bitmap>();
+        badge = BitmapFactory.decodeResource(getResources(), emperatriz.common.R.drawable.badge);
+        badge = Bitmap.createScaledBitmap(badge,48,48, true);
+        badges.add(badge);
+        badge1 = BitmapFactory.decodeResource(getResources(), emperatriz.common.R.drawable.badge1);
+        badge1 = Bitmap.createScaledBitmap(badge1,48,48, true);
+        badges.add(badge1);
+        badge2 = BitmapFactory.decodeResource(getResources(), emperatriz.common.R.drawable.badge2);
+        badge2 = Bitmap.createScaledBitmap(badge2,48,48, true);
+        badges.add(badge2);
+        badge3 = BitmapFactory.decodeResource(getResources(), emperatriz.common.R.drawable.badge3);
+        badge3 = Bitmap.createScaledBitmap(badge3,48,48, true);
+        badges.add(badge3);
+        badge4 = BitmapFactory.decodeResource(getResources(), emperatriz.common.R.drawable.badge4);
+        badge4 = Bitmap.createScaledBitmap(badge4,48,48, true);
+        badges.add(badge4);
+        badge5 = BitmapFactory.decodeResource(getResources(), emperatriz.common.R.drawable.badge5);
+        badge5 = Bitmap.createScaledBitmap(badge5,48,48, true);
+        badges.add(badge5);
 
         Typeface font1 = Typeface.createFromAsset(c.getAssets(), "fonts/SF Square Head.ttf");
         Typeface font2 = Typeface.createFromAsset(c.getAssets(), "fonts/Square.ttf");
@@ -90,11 +118,11 @@ public class CanvasView extends View {
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
 
-        Bitmap back = BitmapFactory.decodeResource(getResources(), emperatriz.common.R.drawable.back);
-        back =  Bitmap.createScaledBitmap(back,320,320, true);
-
-        Bitmap swr = BitmapFactory.decodeResource(getResources(), R.drawable.swr50);
-        swr =  Bitmap.createScaledBitmap(swr,501,660, true);
+//        Bitmap back = BitmapFactory.decodeResource(getResources(), emperatriz.common.R.drawable.back);
+//        back =  Bitmap.createScaledBitmap(back,320,320, true);
+//
+//        Bitmap swr = BitmapFactory.decodeResource(getResources(), R.drawable.swr50);
+//        swr =  Bitmap.createScaledBitmap(swr,501,660, true);
 
         mBackgroundPaint.setColor(backColor);
         canvas.drawBitmap(swr,0,0,null);
@@ -109,6 +137,7 @@ public class CanvasView extends View {
         DrawUtils.isInAmbientMode = false;
 
 
+        canvas.drawBitmap(badges.get(badgeIndex), DrawUtils.offsetX+240, DrawUtils.offsetY+32, mBackgroundPaint);
         DrawUtils.drawDate(restPaint);
         DrawUtils.drawHHmm(timePaint);
         DrawUtils.drawSecs(timePaint);
@@ -123,6 +152,11 @@ public class CanvasView extends View {
 
     public void setColor(int color){
         backColor = color;
+        invalidate();
+    }
+
+    public void setBadge(int index){
+        badgeIndex = index;
         invalidate();
     }
 

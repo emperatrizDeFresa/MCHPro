@@ -72,6 +72,14 @@ public class MessageListener extends WearableListenerService{
             Sys.saveWapp("south",wurlArray.get(1),this);
             Sys.saveWapp("east",wurlArray.get(2),this);
             Sys.saveWapp("west",wurlArray.get(3),this);
+        }else  if (messageEvent.getPath().equals(Sys.WEAR_BADGE)) {
+            try{
+                final String badgeIndex = new String(messageEvent.getData());
+                Sys.save("badge",Integer.parseInt(badgeIndex),this);
+            }catch (Exception ex){
+                Sys.save("badge",0,this);
+            }
+
         }
     }
 }
