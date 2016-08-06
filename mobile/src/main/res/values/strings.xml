@@ -7,6 +7,7 @@
     <string name="notConnected">Error, not connected!</string>
     <string name="shortcuts">Shortcuts</string>
     <string name="backcolor">Background color</string>
-    <string name="custom">Custom</string>
+    <string name="custom">_Custom_</string>
     <string name="hint">Type the name of package</string>
+    <string name="permissions">We need to access internet and your location to obtain times for sunrise and sundown</string>
 </resources>

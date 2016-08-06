@@ -10,6 +10,7 @@ import android.graphics.drawable.Drawable;
 import android.util.Log;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class Sys {
@@ -128,6 +129,11 @@ public class Sys {
         }catch (Exception ex){
 
         }
+//        WappDto custom = ret.get(ret.size()-1);
+        Collections.sort(ret,new WappComparator());
+//        ret.remove(custom);
+//        ret.add(custom);
+
         return ret;
     }
 

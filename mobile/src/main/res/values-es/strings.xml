@@ -7,6 +7,7 @@
     <string name="notConnected">Error, no conectado!</string>
     <string name="shortcuts">Accesos directos</string>
     <string name="backcolor">Color de fondo</string>
-    <string name="custom">Personal</string>
+    <string name="custom">_Personal_</string>
     <string name="hint">Escribe el nombre del package</string>
+    <string name="permissions">Necesitamos tener acceso a internet y a tu ubicación para obtener los horarios de alba y ocaso</string>
 </resources>

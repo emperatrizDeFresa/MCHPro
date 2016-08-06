@@ -37,8 +37,7 @@ public class ListenerSun extends WearableListenerService implements GoogleApiCli
     private GoogleApiClient mGoogleApiClient;
     private String mPeerId;
     private String batteryPct="";
-    String sunrise;
-    String sunset;
+
     boolean connected=false;
 
 
@@ -56,7 +55,7 @@ public class ListenerSun extends WearableListenerService implements GoogleApiCli
                 if ( ContextCompat.checkSelfPermission( this, Manifest.permission.ACCESS_COARSE_LOCATION ) == PackageManager.PERMISSION_GRANTED ) {
                     Location lastlocation = locationManager.getLastKnownLocation(locationProvider);
                     SunTimes st = new SunTimes();
-                    st.execute("http://api.sunrise-sunset.org/json?lat="+lastlocation.getLatitude()+"&lng="+lastlocation.getLongitude()+"&date=tomorrow&formatted=0");
+                    st.execute("http://api.sunrise-sunset.org/json?lat="+lastlocation.getLatitude()+"&lng="+lastlocation.getLongitude()+"&date=today&formatted=0");
                 }
             }catch (Exception ex){
 
@@ -90,6 +89,8 @@ public class ListenerSun extends WearableListenerService implements GoogleApiCli
     }
 
     public class SunTimes extends AsyncTask<String, Long, String> {
+        String sunrise;
+        String sunset;
         protected String doInBackground(String... urls) {
             try {
                 if ( ContextCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.INTERNET ) == PackageManager.PERMISSION_GRANTED ) {
@@ -114,7 +115,8 @@ public class ListenerSun extends WearableListenerService implements GoogleApiCli
                 Date sr = dateFormat.parse(sunrise1);
                 Date ss = dateFormat.parse(sunset1);
                 SimpleDateFormat dateFormat2 = new SimpleDateFormat("HH:mm");
-                dateFormat2.setTimeZone(TimeZone.getTimeZone(toTimeZone));
+                //dateFormat2.setTimeZone(TimeZone.getTimeZone(toTimeZone));
+                dateFormat2.setTimeZone(TimeZone.getDefault());
                 sunrise = dateFormat2.format(sr);
                 sunset = dateFormat2.format(ss);
                 sendMessage(Sys.SUNTIMES_PATH,sunrise+"|"+sunset);

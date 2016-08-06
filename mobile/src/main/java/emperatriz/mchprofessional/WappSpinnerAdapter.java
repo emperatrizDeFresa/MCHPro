@@ -43,7 +43,12 @@ public class WappSpinnerAdapter extends ArrayAdapter<WappDto> {
             TextView name = (TextView)row.findViewById(R.id.name);
             TextView url = (TextView)row.findViewById(R.id.url);
             name.setText(item.name);
-            url.setText(item.url);
+            if (item.name.equals(context.getResources().getString(R.string.custom))){
+                url.setText(context.getResources().getString(R.string.hint));
+            }else{
+                url.setText(item.url);
+            }
+
         }
 
         return row;

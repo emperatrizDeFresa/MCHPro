@@ -1,5 +1,7 @@
 package emperatriz.common;
 
+import java.util.Comparator;
+
 /**
  * Created by ramon on 29/07/2016.
  */
@@ -18,9 +20,13 @@ public class WappDto {
     @Override
     public boolean equals(Object obj){
         try{
-            return this.url.equals(((WappDto)obj).url);
+            return (this.url.equals(((WappDto)obj).url));
         }catch (Exception ex){
             return false;
         }
     }
+
+
 }
+
+

@@ -146,7 +146,18 @@ public class MainActivity extends AppCompatActivity  implements GoogleApiClient.
 
         if (ContextCompat.checkSelfPermission( this, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED ||
             ContextCompat.checkSelfPermission( this, android.Manifest.permission.INTERNET) != PackageManager.PERMISSION_GRANTED    ) {
-            ActivityCompat.requestPermissions(MainActivity.this,new String[]{Manifest.permission.ACCESS_COARSE_LOCATION,Manifest.permission.INTERNET},2706);
+            new AlertDialog.Builder(MainActivity.this)
+                        .setPositiveButton(getResources().getString(R.string.ok), new DialogInterface.OnClickListener() {
+
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                ActivityCompat.requestPermissions(MainActivity.this,new String[]{Manifest.permission.ACCESS_COARSE_LOCATION,Manifest.permission.INTERNET},2706);
+                            }
+                        })
+                    .setCancelable(false)
+                    .setMessage(getResources().getString(R.string.permissions))
+                    .show();
+
         }
 
 
@@ -217,7 +228,7 @@ public class MainActivity extends AppCompatActivity  implements GoogleApiClient.
     @Override
     public void onConnected(Bundle bundle) {
         Sys.save("color",backColor,MainActivity.this);
-        sendMessage(Sys.WEAR_BADGE,badgeIndex+"",true);
+        sendMessage(Sys.WEAR_BADGE,badgeIndex+"",false);
         Sys.save("badge",badgeIndex,MainActivity.this);
         int c = Integer.parseInt(backColor+"");
         sendMessage(Sys.COLOR_PATH,backColor+"",false);
@@ -230,8 +241,57 @@ public class MainActivity extends AppCompatActivity  implements GoogleApiClient.
         wurls += s.name+","+s.url+";";
         wurls += e.name+","+e.url+";";
         wurls += w.name+","+w.url;
-        sendMessage(Sys.WEAR_URLS,wurls,true);
+        sendMessage(Sys.WEAR_URLS,wurls,false);
+        try{
+            LocationManager locationManager = (LocationManager) getApplicationContext().getSystemService(Context.LOCATION_SERVICE);
+            String locationProvider = LocationManager.NETWORK_PROVIDER;
+            if ( ContextCompat.checkSelfPermission( this, Manifest.permission.ACCESS_COARSE_LOCATION ) == PackageManager.PERMISSION_GRANTED ) {
+                Location lastlocation = locationManager.getLastKnownLocation(locationProvider);
+                SunTimes st = new SunTimes();
+                st.execute("http://api.sunrise-sunset.org/json?lat="+lastlocation.getLatitude()+"&lng="+lastlocation.getLongitude()+"&date=today&formatted=0");
+            }
+        }catch (Exception ex){
 
+        }
+    }
+
+    public class SunTimes extends AsyncTask<String, Long, String> {
+        String sunrise;
+        String sunset;
+        protected String doInBackground(String... urls) {
+            try {
+                if ( ContextCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.INTERNET ) == PackageManager.PERMISSION_GRANTED ) {
+                    return HttpRequest.get(urls[0]).accept("application/json").body();
+                }
+                return null;
+            } catch (Exception exception) {
+                return null;
+            }
+        }
+
+        protected void onPostExecute(String response) {
+            try{
+                String toTimeZone = "CET";
+                String fromTimeZone = "UTC";
+                JSONObject jObject = new JSONObject(response);
+                JSONObject results = jObject.getJSONObject("results");
+                String sunrise1 = results.getString("sunrise").replace("+00:00","");
+                String sunset1 = results.getString("sunset").replace("+00:00","");;
+                SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
+                dateFormat.setTimeZone(TimeZone.getTimeZone(fromTimeZone));
+                Date sr = dateFormat.parse(sunrise1);
+                Date ss = dateFormat.parse(sunset1);
+                SimpleDateFormat dateFormat2 = new SimpleDateFormat("HH:mm");
+                //dateFormat2.setTimeZone(TimeZone.getTimeZone(toTimeZone));
+                dateFormat2.setTimeZone(TimeZone.getDefault());
+                sunrise = dateFormat2.format(sr);
+                sunset = dateFormat2.format(ss);
+                sendMessage(Sys.SUNTIMES_PATH,sunrise+"|"+sunset,true);
+            }catch (Exception ex){
+
+            }
+
+        }
     }
 
     @Override
