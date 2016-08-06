@@ -468,7 +468,10 @@ public class MCHWatchFace extends CanvasWatchFaceService implements SensorEventL
             String watchBattery = Math.round(level*100 / (float)scale)+"";
             todaySteps = Sys.getInt("todaySteps", 0, MCHWatchFace.this);
             steps = Sys.getInt("steps", 0, MCHWatchFace.this);
-
+            if (steps-todaySteps<0){
+                Sys.save("todaySteps", steps, MCHWatchFace.this);
+                todaySteps=steps;
+            }
 
             DrawUtils.drawBackground(mBackgroundBitmap, mBackgroundBitmapAmb, badges.get(Sys.getInt("badge",0,getApplicationContext())),mBackgroundPaint, whitePaint);
             DrawUtils.drawDate(restPaint);
