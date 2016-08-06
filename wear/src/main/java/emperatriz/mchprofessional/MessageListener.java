@@ -67,7 +67,7 @@ public class MessageListener extends WearableListenerService{
             mGoogleApiClient.connect();
         }else  if (messageEvent.getPath().equals(Sys.WEAR_URLS)) {
             final String wurls = new String(messageEvent.getData());
-            ArrayList<WappDto> wurlArray = Sys.parseWapps(wurls);
+            ArrayList<WappDto> wurlArray = Sys.parseWapps(wurls,false);
             Sys.saveWapp("north",wurlArray.get(0),this);
             Sys.saveWapp("south",wurlArray.get(1),this);
             Sys.saveWapp("east",wurlArray.get(2),this);

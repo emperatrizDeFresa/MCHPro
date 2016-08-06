@@ -114,7 +114,7 @@ public class Sys {
         return ret;
     }
 
-    public static ArrayList<WappDto> parseWapps(String wapps){
+    public static ArrayList<WappDto> parseWapps(String wapps, boolean sort){
         ArrayList<WappDto> ret = new ArrayList<WappDto>();
         try{
             String[] pairs = wapps.split(";");
@@ -129,10 +129,8 @@ public class Sys {
         }catch (Exception ex){
 
         }
-//        WappDto custom = ret.get(ret.size()-1);
-        Collections.sort(ret,new WappComparator());
-//        ret.remove(custom);
-//        ret.add(custom);
+
+        if (sort) Collections.sort(ret,new WappComparator());
 
         return ret;
     }

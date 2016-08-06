@@ -203,7 +203,7 @@ public class MainActivity extends AppCompatActivity  implements GoogleApiClient.
         appW.setText(west.name);
         appW.setOnClickListener(this);
 
-        ArrayList<WappDto> wappsArray = Sys.parseWapps(Sys.getString("wapps","",this));
+        ArrayList<WappDto> wappsArray = Sys.parseWapps(Sys.getString("wapps","",this),true);
         if (wappsArray.size()==0){
             UpdateWapps uw = new UpdateWapps();
             uw.execute();
@@ -344,7 +344,7 @@ public class MainActivity extends AppCompatActivity  implements GoogleApiClient.
             url = (TextView) dialogView.findViewById(R.id.url);
             url.setEnabled(false);
             spin = (Spinner) dialogView.findViewById(R.id.spinner);
-            ArrayList<WappDto> wappsArray = Sys.parseWapps(Sys.getString("wapps","",this));
+            ArrayList<WappDto> wappsArray = Sys.parseWapps(Sys.getString("wapps","",this),true);
 
             spin.setAdapter(new WappSpinnerAdapter(this,R.layout.wapprow,wappsArray));
             spin.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -406,7 +406,7 @@ public class MainActivity extends AppCompatActivity  implements GoogleApiClient.
             url = (TextView) dialogView.findViewById(R.id.url);
             url.setEnabled(false);
             spin = (Spinner) dialogView.findViewById(R.id.spinner);
-            ArrayList<WappDto> wappsArray = Sys.parseWapps(Sys.getString("wapps","",this));
+            ArrayList<WappDto> wappsArray = Sys.parseWapps(Sys.getString("wapps","",this),true);
             spin.setAdapter(new WappSpinnerAdapter(this,R.layout.wapprow,wappsArray));
             spin.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                 @Override
@@ -467,7 +467,7 @@ public class MainActivity extends AppCompatActivity  implements GoogleApiClient.
             url = (TextView) dialogView.findViewById(R.id.url);
             url.setEnabled(false);
             spin = (Spinner) dialogView.findViewById(R.id.spinner);
-            ArrayList<WappDto> wappsArray = Sys.parseWapps(Sys.getString("wapps","",this));
+            ArrayList<WappDto> wappsArray = Sys.parseWapps(Sys.getString("wapps","",this),true);
             spin.setAdapter(new WappSpinnerAdapter(this,R.layout.wapprow,wappsArray));
             spin.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                 @Override
@@ -528,7 +528,7 @@ public class MainActivity extends AppCompatActivity  implements GoogleApiClient.
             url = (TextView) dialogView.findViewById(R.id.url);
             url.setEnabled(false);
             spin = (Spinner) dialogView.findViewById(R.id.spinner);
-            ArrayList<WappDto> wappsArray = Sys.parseWapps(Sys.getString("wapps","",this));
+            ArrayList<WappDto> wappsArray = Sys.parseWapps(Sys.getString("wapps","",this),true);
             spin.setAdapter(new WappSpinnerAdapter(this,R.layout.wapprow,wappsArray));
             spin.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                 @Override
