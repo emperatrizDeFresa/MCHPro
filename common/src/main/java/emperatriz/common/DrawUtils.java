@@ -43,13 +43,13 @@ public class DrawUtils {
         float l1 = paint.measureText(mTime.format("%A"));
         if (l1>165) paint.setLetterSpacing(-0.05f);
 
-        paint.setAlpha(51);
+        paint.setAlpha(isInAmbientMode?102:51);
         canvas.drawText(mTime.format("%A"), offsetX+42, offsetY+57, paint);
 //        canvas.drawText("MIÉRCOLES", 42, 57, paint);
         paint.setAlpha(255);
         canvas.drawText(mTime.format("%A"), offsetX+39, offsetY+54, paint);
 //        canvas.drawText("MIÉRCOLES", 39, 54, paint);
-        paint.setAlpha(51);
+        paint.setAlpha(isInAmbientMode?102:51);
         String date = mTime.format("%d %B");
         if (date.startsWith("0")){
             date = date.substring(1);
@@ -72,7 +72,7 @@ public class DrawUtils {
         paint.setTextSize(70);
         paint.setLetterSpacing(0.08f);
 
-        paint.setAlpha(51);
+        paint.setAlpha(isInAmbientMode?102:51);
 
         String time = String.format("%d:%02d", mTime.hour, mTime.minute);
         if (time.length()==4){
@@ -104,7 +104,7 @@ public class DrawUtils {
             //canvas.drawText("--", 216, 196, paint);
         }else{
             paint.setColor(0xff000000);
-            paint.setAlpha(51);
+            paint.setAlpha(isInAmbientMode?102:51);
             canvas.drawText(secs, offsetX+219, offsetY+199, paint);
             paint.setAlpha(255);
             canvas.drawText(secs, offsetX+216, offsetY+196, paint);
@@ -122,7 +122,7 @@ public class DrawUtils {
         paint.setTextSize(24);
         paint.setLetterSpacing(0.05f);
 
-        paint.setAlpha(51);
+        paint.setAlpha(isInAmbientMode?102:51);
         canvas.drawText(value, offsetX+72, offsetY+209, paint);
         paint.setAlpha(255);
         canvas.drawText(value, offsetX+69, offsetY+206, paint);
@@ -135,7 +135,7 @@ public class DrawUtils {
         paint.setLetterSpacing(0.05f);
 
         float w = paint.measureText(value);
-        paint.setAlpha(51);
+        paint.setAlpha(isInAmbientMode?102:51);
         canvas.drawText(value, offsetX+263-w, offsetY+247, paint);
         paint.setAlpha(255);
         canvas.drawText(value, offsetX+260-w, offsetY+244, paint);
@@ -147,7 +147,7 @@ public class DrawUtils {
         paint.setTextSize(24);
         paint.setLetterSpacing(0.05f);
         float w = paint.measureText(value);
-        paint.setAlpha(51);
+        paint.setAlpha(isInAmbientMode?102:51);
         canvas.drawText(value, offsetX+263-w, offsetY+285, paint);
         paint.setAlpha(255);
         canvas.drawText(value, offsetX+260-w, offsetY+282, paint);
@@ -162,7 +162,7 @@ public class DrawUtils {
         paint.setTextSize(24);
         paint.setLetterSpacing(0.05f);
 
-        paint.setAlpha(51);
+        paint.setAlpha(isInAmbientMode?102:51);
         canvas.drawText(value, offsetX+72, offsetY+247, paint);
         paint.setAlpha(255);
         canvas.drawText(value, offsetX+69, offsetY+244, paint);
@@ -177,7 +177,7 @@ public class DrawUtils {
         paint.setLetterSpacing(0.05f);
 
 
-        paint.setAlpha(51);
+        paint.setAlpha(isInAmbientMode?102:51);
         canvas.drawText(value, offsetX+72, offsetY+285, paint);
         paint.setAlpha(255);
         canvas.drawText(value, offsetX+69, offsetY+282, paint);
@@ -190,6 +190,9 @@ public class DrawUtils {
         paint.setLetterSpacing(0.05f);
         if (value>0){
             value = value>9?0:value;
+            paint.setAlpha(isInAmbientMode?102:51);
+            canvas.drawBitmap(bells.get(value), offsetX+135, offsetX+195, paint);
+            paint.setAlpha(255);
             canvas.drawBitmap(bells.get(value), offsetX+132, offsetX+192, paint);
         }
 
@@ -206,7 +209,7 @@ public class DrawUtils {
         if (w%2==1) w++;
         canvas.drawRect(offsetX+width/2-(w+6)/2,offsetY+0,offsetX+width/2+(w+6)/2,offsetY+20,paint);
         paint.setColor(0xffffffff);
-        canvas.drawText(north, offsetX+width/2-w/2, offsetY+22, paint);
+        canvas.drawText(north, offsetX+width/2-w/2, offsetY+19, paint);
 
         w = paint.measureText(south);
         paint.setColor(0xff000000);
@@ -214,7 +217,7 @@ public class DrawUtils {
         if (w%2==1) w++;
         canvas.drawRect(offsetX+width/2-(w+6)/2,offsetY+300,offsetX+width/2+(w+6)/2,offsetY+height,paint);
         paint.setColor(0xffffffff);
-        canvas.drawText(south, offsetX+width/2-w/2, offsetY+314, paint);
+        canvas.drawText(south, offsetX+width/2-w/2, offsetY+317, paint);
 
         canvas.rotate(-90,offsetX+width/2,offsetY+height/2);
 
@@ -224,7 +227,7 @@ public class DrawUtils {
         if (w%2==1) w++;
         canvas.drawRect(offsetX+width/2-(w+6)/2,offsetY+0,offsetX+width/2+(w+6)/2,offsetY+20,paint);
         paint.setColor(0xffffffff);
-        canvas.drawText(west, offsetX+width/2-w/2, offsetY+22, paint);
+        canvas.drawText(west, offsetX+width/2-w/2, offsetY+19, paint);
 
         w = paint.measureText(east);
         paint.setColor(0xff000000);
@@ -232,7 +235,7 @@ public class DrawUtils {
         if (w%2==1) w++;
         canvas.drawRect(offsetX+width/2-(w+6)/2,offsetY+300,offsetX+width/2+(w+6)/2,offsetY+height,paint);
         paint.setColor(0xffffffff);
-        canvas.drawText(east, offsetX+width/2-w/2, offsetY+314, paint);
+        canvas.drawText(east, offsetX+width/2-w/2, offsetY+317, paint);
 
         canvas.rotate(90,offsetX+width/2,offsetY+height/2);
 

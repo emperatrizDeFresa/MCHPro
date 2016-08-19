@@ -10,4 +10,6 @@
     <string name="custom">_Personal_</string>
     <string name="hint">Escribe el nombre del package</string>
     <string name="permissions">Necesitamos tener acceso a internet y a tu ubicación para obtener los horarios de alba y ocaso</string>
+    <string name="info">COLOR DE FONDO\n\nMantén pulsados los botones de color predefinidos para modificarlos.\n\n\n\nACCESOS DIRECTOS\n\nHaz doble toque en el acceso directo (en el reloj) para lanzar la app</string>
+
 </resources>

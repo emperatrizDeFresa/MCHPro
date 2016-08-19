@@ -10,4 +10,6 @@
     <string name="custom">_Custom_</string>
     <string name="hint">Type the name of package</string>
     <string name="permissions">We need to access internet and your location to obtain times for sunrise and sundown</string>
+    <string name="info">BACKGROUND COLOR\n\nHold the predefined color buttons to modify them.\n\n\n\nSHORTCUTS\n\nDouble tap the shortcut (on the clock) to launch the app</string>
+
 </resources>

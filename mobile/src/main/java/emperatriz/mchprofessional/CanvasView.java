@@ -36,7 +36,7 @@ public class CanvasView extends View {
     MainActivity ma;
     Bitmap back, swr;
     ArrayList<Bitmap> badges;
-    Bitmap badge, badge1, badge2, badge3, badge4,badge5;
+    Bitmap badge, badge1, badge2, badge3, badge4,badge5,badge6;
 
     public CanvasView(Context c, AttributeSet attrs) {
         super(c, attrs);
@@ -64,6 +64,9 @@ public class CanvasView extends View {
         badge4 = BitmapFactory.decodeResource(getResources(), emperatriz.common.R.drawable.badge4);
         badge4 = Bitmap.createScaledBitmap(badge4,48,48, true);
         badges.add(badge4);
+        badge6 = BitmapFactory.decodeResource(getResources(), emperatriz.common.R.drawable.badge6);
+        badge6 = Bitmap.createScaledBitmap(badge6,48,48, true);
+        badges.add(badge6);
         badge5 = BitmapFactory.decodeResource(getResources(), emperatriz.common.R.drawable.badge5);
         badge5 = Bitmap.createScaledBitmap(badge5,48,48, true);
         badges.add(badge5);

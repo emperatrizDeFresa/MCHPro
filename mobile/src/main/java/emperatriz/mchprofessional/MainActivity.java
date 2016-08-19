@@ -10,6 +10,7 @@ import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
+import android.graphics.drawable.ColorDrawable;
 import android.location.Location;
 import android.location.LocationManager;
 import android.location.LocationProvider;
@@ -36,6 +37,7 @@ import android.view.animation.LinearInterpolator;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TabHost;
@@ -68,7 +70,7 @@ public class MainActivity extends AppCompatActivity  implements GoogleApiClient.
 
     private GoogleApiClient mGoogleApiClient;
     int backColor,badgeIndex;
-    Button  appN, appE, appW, appS;
+    Button  appN, appE, appW, appS, color1, color2, color3;
     Spinner spin;
     TextView name, url;
     FloatingActionButton fab;
@@ -112,6 +114,7 @@ public class MainActivity extends AppCompatActivity  implements GoogleApiClient.
         badgesList.add("Star Trek");
         badgesList.add("Star Wars");
         badgesList.add("Android");
+        badgesList.add("Zelda");
         badgesList.add("Candón");
 
         cv.setOnLongClickListener(new View.OnLongClickListener() {
@@ -175,7 +178,7 @@ public class MainActivity extends AppCompatActivity  implements GoogleApiClient.
         host.addTab(spec);
 
 
-        ColorPicker picker = (ColorPicker) findViewById(R.id.picker);
+        final ColorPicker picker = (ColorPicker) findViewById(R.id.picker);
         SVBar svBar = (SVBar) findViewById(R.id.svbar);
         picker.addSVBar(svBar);
         picker.setColor(Sys.getInt("color", 0xff00dddd, MainActivity.this));
@@ -209,6 +212,73 @@ public class MainActivity extends AppCompatActivity  implements GoogleApiClient.
             uw.execute();
         }
 
+        color1 = (Button) findViewById(R.id.colorGreen);
+        color1.setBackgroundColor(Sys.getInt("color1",0xff9aff98, this));
+        color1.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                Sys.save("color1",picker.getColor(),MainActivity.this);
+                v.setBackgroundColor(Sys.getInt("color1",0xff9aff98, MainActivity.this));
+                return true;
+            }
+        });
+        color1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ColorDrawable buttonColor = (ColorDrawable) v.getBackground();
+                picker.setColor(buttonColor.getColor());
+            }
+        });
+        color2 = (Button) findViewById(R.id.colorBlue);
+        color2.setBackgroundColor(Sys.getInt("color2",0xff00dddd, this));
+        color2.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                Sys.save("color2",picker.getColor(),MainActivity.this);
+                v.setBackgroundColor(Sys.getInt("color2",0xff00dddd, MainActivity.this));
+                return true;
+            }
+        });
+        color2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ColorDrawable buttonColor = (ColorDrawable) v.getBackground();
+                picker.setColor(buttonColor.getColor());
+            }
+        });
+        color3 = (Button) findViewById(R.id.colorOrange);
+        color3.setBackgroundColor(Sys.getInt("color3",0xffffb504, this));
+        color3.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                Sys.save("color3",picker.getColor(),MainActivity.this);
+                v.setBackgroundColor(Sys.getInt("color3",0xffffb504, MainActivity.this));
+                return true;
+            }
+        });
+        color3.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ColorDrawable buttonColor = (ColorDrawable) v.getBackground();
+                picker.setColor(buttonColor.getColor());
+            }
+        });
+
+        ImageView info = (ImageView)findViewById(R.id.info);
+        info.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                new AlertDialog.Builder(MainActivity.this)
+                        .setMessage(getResources().getString(R.string.info))
+                        .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.dismiss();
+                            }
+                        })
+                        .show();
+            }
+        });
+
     }
 
 
@@ -227,6 +297,12 @@ public class MainActivity extends AppCompatActivity  implements GoogleApiClient.
 
     @Override
     public void onConnected(Bundle bundle) {
+        Intent batteryIntent = registerReceiver(null, new IntentFilter(Intent.ACTION_BATTERY_CHANGED));
+        int level = batteryIntent.getIntExtra(BatteryManager.EXTRA_LEVEL, -1);
+        int scale = batteryIntent.getIntExtra(BatteryManager.EXTRA_SCALE, -1);
+        String batteryPct = Math.round(level*100 / (float)scale)+"";
+        sendMessage(Sys.PHONE_BATTERY_PATH, batteryPct,false);
+        //Toast.makeText(MainActivity.this,String.format("#%06X", (0xFFFFFF & backColor)), Toast.LENGTH_SHORT).show();
         Sys.save("color",backColor,MainActivity.this);
         sendMessage(Sys.WEAR_BADGE,badgeIndex+"",false);
         Sys.save("badge",badgeIndex,MainActivity.this);

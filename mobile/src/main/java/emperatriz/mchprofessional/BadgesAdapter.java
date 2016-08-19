@@ -58,6 +58,9 @@ public class BadgesAdapter extends ArrayAdapter<String> {
                     img.setImageResource(emperatriz.common.R.drawable.badge4);
                     break;
                 case 5:
+                    img.setImageResource(emperatriz.common.R.drawable.badge6);
+                    break;
+                case 6:
                     img.setImageResource(emperatriz.common.R.drawable.badge5);
                     break;
             }

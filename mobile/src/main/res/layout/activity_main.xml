@@ -17,19 +17,19 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="center"
         android:background="@color/colorPrimary"
+        android:gravity="center"
         android:orientation="horizontal"
-        android:paddingTop="20dp"
-        android:paddingBottom="20dp">
+        android:paddingBottom="26dp"
+        android:paddingTop="2dp">
 
         <ImageView
-            android:layout_width="20dp"
+            android:id="@+id/imageView"
+            android:layout_width="50dp"
             android:layout_height="200dp"
-            android:src="@drawable/title"
+            android:layout_marginRight="30dp"
             android:scaleType="centerInside"
-            android:layout_marginRight="60dp"
-            android:id="@+id/imageView"/>
+            android:src="@drawable/title"/>
 
         <emperatriz.mchprofessional.CanvasView
             android:id="@+id/view"
@@ -39,12 +39,12 @@
             android:gravity="center"/>
 
         <ImageView
-            android:layout_width="20dp"
+            android:id="@+id/info"
+            android:layout_width="50dp"
             android:layout_height="200dp"
-            android:src="@drawable/title2"
+            android:layout_marginLeft="30dp"
             android:scaleType="centerInside"
-            android:layout_marginLeft="60dp"
-            android:id="@+id/imageView2"/>
+            android:src="@drawable/info"/>
 
     </LinearLayout>
     <android.support.design.widget.FloatingActionButton
@@ -52,15 +52,15 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="top|end"
-        android:layout_marginTop="-28dp"
         android:layout_marginEnd="10dp"
+        android:layout_marginTop="-28dp"
         android:src="@drawable/sendtowatch" />
 
     <TabHost
         android:id="@+id/tab_host"
-        android:layout_marginTop="-28dp"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:layout_marginTop="-28dp">
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -69,18 +69,18 @@
 
             <TabWidget
                 android:id="@android:id/tabs"
-                android:layout_alignParentBottom="true"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
                 android:layout_weight="0"
                 />
 
 
             <FrameLayout
                 android:id="@android:id/tabcontent"
-                android:layout_alignParentTop="true"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:layout_alignParentTop="true"
                 android:layout_weight="1"
                 >
 
@@ -88,9 +88,75 @@
                     android:id="@+id/tab_one_container"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
+                    android:paddingTop="20dp"
+                    android:paddingBottom="40dp"
+                    android:paddingRight="0dp"
+                    android:paddingLeft="10dp"
+                    android:layout_gravity="center_horizontal"
+                    android:orientation="horizontal"
+                    >
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
                     android:layout_gravity="center_horizontal"
                     android:orientation="vertical"
                     >
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="0dp"
+                        android:layout_weight="0.3"
+                        android:layout_gravity="center_horizontal"
+                        android:orientation="vertical"
+                        >
+                    <Button
+                        android:id="@+id/colorGreen"
+                        android:layout_width="60dp"
+                        android:layout_height="60dp"
+                        android:fontFamily="sans-serif-condensed"
+                        android:textSize="12dp"
+                        android:background="#9aff98"/>
+                    </LinearLayout>
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="0dp"
+                        android:layout_weight="0.3"
+                        android:layout_gravity="center_horizontal"
+                        android:orientation="vertical"
+                        >
+                    <Button
+                        android:id="@+id/colorBlue"
+                        android:layout_width="60dp"
+                        android:layout_height="60dp"
+                        android:fontFamily="sans-serif-condensed"
+                        android:textSize="12dp"
+                        android:background="#00dddd"/>
+                    </LinearLayout>
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="0dp"
+                        android:layout_weight="0.3"
+                        android:layout_gravity="center_horizontal"
+                        android:orientation="vertical"
+                        >
+                    <Button
+                        android:id="@+id/colorOrange"
+                        android:layout_width="60dp"
+                        android:layout_height="60dp"
+                        android:fontFamily="sans-serif-condensed"
+                        android:textSize="12dp"
+                        android:background="#ffb504"/>
+
+                    </LinearLayout>
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_weight="1"
+                    android:orientation="vertical"
+                    >
+
+
 
                     <com.larswerkman.holocolorpicker.ColorPicker
                         android:id="@+id/picker"
@@ -105,22 +171,23 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_horizontal"
                         />
+                    </LinearLayout>
                 </LinearLayout>
 
                 <LinearLayout
                     android:id="@+id/tab_two_container"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:orientation="vertical"
                     android:layout_marginTop="15dp"
+                    android:orientation="vertical"
                     android:padding="10dp"
                     >
 
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:orientation="vertical"
                         android:gravity="center_horizontal"
+                        android:orientation="vertical"
                         >
 
 
@@ -128,16 +195,16 @@
                             android:id="@+id/appN"
                             android:layout_width="320px"
                             android:layout_height="wrap_content"
-                            android:textSize="10dp"
                             android:text="AppN"
+                            android:textSize="10dp"
                             />
                     </LinearLayout>
 
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="320px"
-                        android:orientation="horizontal"
                         android:gravity="center_horizontal"
+                        android:orientation="horizontal"
                         >
 
 
@@ -145,38 +212,38 @@
                             android:id="@+id/appW"
                             android:layout_width="wrap_content"
                             android:layout_height="match_parent"
-                            android:textSize="10dp"
-                            android:text="AppW"/>
+                            android:text="AppW"
+                            android:textSize="10dp"/>
                         <LinearLayout
                             android:layout_width="320px"
                             android:layout_height="320px"
                             android:background="@android:color/transparent"
-                            android:orientation="horizontal"
                             android:gravity="center_horizontal"
+                            android:orientation="horizontal"
                             />
 
                         <emperatriz.mchprofessional.VerticalButton
                             android:id="@+id/appE"
                             android:layout_width="wrap_content"
                             android:layout_height="match_parent"
-                            android:textSize="10dp"
                             android:text="AppE"
+                            android:textSize="10dp"
                             />
                     </LinearLayout>
 
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:orientation="vertical"
                         android:gravity="center_horizontal"
+                        android:orientation="vertical"
                         >
 
                         <Button
                             android:id="@+id/appS"
                             android:layout_width="320px"
                             android:layout_height="wrap_content"
-                            android:textSize="10dp"
                             android:text="AppS"
+                            android:textSize="10dp"
                             />
 
 

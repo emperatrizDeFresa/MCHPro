@@ -168,7 +168,7 @@ public class MCHWatchFace extends CanvasWatchFaceService implements SensorEventL
         private Bitmap badge2;
         private Bitmap badge3;
         private Bitmap badge4;
-        private Bitmap badge5;
+        private Bitmap badge5,badge6;
         private List<Bitmap> bells;
         private Bitmap bell;
         private Bitmap bell1;
@@ -270,6 +270,9 @@ public class MCHWatchFace extends CanvasWatchFaceService implements SensorEventL
             badge4 = BitmapFactory.decodeResource(getResources(), emperatriz.common.R.drawable.badge4);
             badge4 = Bitmap.createScaledBitmap(badge4,(int) (badge4.getWidth() * scale),(int) (badge4.getHeight() * scale), true);
             badges.add(badge4);
+            badge6 = BitmapFactory.decodeResource(getResources(), emperatriz.common.R.drawable.badge6);
+            badge6 = Bitmap.createScaledBitmap(badge6,(int) (badge6.getWidth() * scale),(int) (badge6.getHeight() * scale), true);
+            badges.add(badge6);
             badge5 = BitmapFactory.decodeResource(getResources(), emperatriz.common.R.drawable.badge5);
             badge5 = Bitmap.createScaledBitmap(badge5,(int) (badge5.getWidth() * scale),(int) (badge5.getHeight() * scale), true);
             badges.add(badge5);
@@ -454,7 +457,7 @@ public class MCHWatchFace extends CanvasWatchFaceService implements SensorEventL
             DrawUtils.width = bounds.width();
             DrawUtils.canvas = canvas;
             DrawUtils.isInAmbientMode = isInAmbientMode();
-            DrawUtils.color = Sys.getInt("color", 0xff33ffff, getApplicationContext());
+            DrawUtils.color = Sys.getInt("color", 0xff00dddd, getApplicationContext());
             DrawUtils.offsetX=0;
             DrawUtils.offsetY=0;
 
