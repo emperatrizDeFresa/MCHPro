@@ -29,6 +29,7 @@ public class Sys {
     public static final String WEAR_APPS = "/mch/wapps";
     public static final String WEAR_URLS = "/mch/wurls";
     public static final String WEAR_BADGE = "/mch/badge";
+    public static final String WEAR_BACK = "/mch/back";
 
     public static String TIMER = "com.android.timer";
     public static String ALARM = "com.android.alarm";

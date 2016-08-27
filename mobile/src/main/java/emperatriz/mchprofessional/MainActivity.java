@@ -69,13 +69,14 @@ import emperatriz.common.WappDto;
 public class MainActivity extends AppCompatActivity  implements GoogleApiClient.ConnectionCallbacks, View.OnClickListener, ColorPicker.OnColorChangedListener, ColorPicker.OnColorSelectedListener {
 
     private GoogleApiClient mGoogleApiClient;
-    int backColor,badgeIndex;
-    Button  appN, appE, appW, appS, color1, color2, color3;
+    int backColor,badgeIndex, backIndex;
+    Button  appN, appE, appW, appS, appC, color1, color2, color3;
     Spinner spin;
     TextView name, url;
     FloatingActionButton fab;
+    int cheat=0;
 
-    public WappDto north, south, east ,west;
+    public WappDto north, south, east ,west, center;
 
     CanvasView cv;
 
@@ -116,6 +117,7 @@ public class MainActivity extends AppCompatActivity  implements GoogleApiClient.
         badgesList.add("Android");
         badgesList.add("Zelda");
         badgesList.add("Candón");
+        badgesList.add("Nel");
 
         cv.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
@@ -130,20 +132,47 @@ public class MainActivity extends AppCompatActivity  implements GoogleApiClient.
                                 dialog.dismiss();
                             }
                         })
-//                        .setPositiveButton(getResources().getString(R.string.ok), new DialogInterface.OnClickListener() {
-//
-//                            @Override
-//                            public void onClick(DialogInterface dialog, int which) {
-//
-//                            }
-//                        })
                         .setCancelable(true)
                         .show();
                 return false;
             }
         });
+
+
+        final ArrayList<String> backsList = new ArrayList<String>();
+        backsList.add("Negro");
+        backsList.add("Violeta");
+        backsList.add("Azul");
+        backsList.add("Carmesí");
+        backsList.add("Verde");
+        ImageView mch = (ImageView) findViewById(R.id.imageViewmch);
+        mch.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                cheat++;
+                if (cheat%6==0){
+                    new AlertDialog.Builder(MainActivity.this)
+                            .setAdapter(new BacksAdapter(MainActivity.this,R.layout.backrow,backsList), new DialogInterface.OnClickListener() {
+
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    cv.setBack(which);
+                                    backIndex=which;
+                                    dialog.dismiss();
+                                }
+                            })
+                            .setCancelable(true)
+                            .show();
+
+                }
+            }
+        });
+
+
         backColor = Sys.getInt("color", 0xff00dddd, MainActivity.this);
         badgeIndex = Sys.getInt("badge", 0, MainActivity.this);
+        backIndex = Sys.getInt("background", 0, MainActivity.this);
+
 
         cv.setBadge(badgeIndex);
 
@@ -179,8 +208,12 @@ public class MainActivity extends AppCompatActivity  implements GoogleApiClient.
 
 
         final ColorPicker picker = (ColorPicker) findViewById(R.id.picker);
-        SVBar svBar = (SVBar) findViewById(R.id.svbar);
-        picker.addSVBar(svBar);
+//        SVBar svBar = (SVBar) findViewById(R.id.svbar);
+//        picker.addSVBar(svBar);
+        SaturationBar sBar = (SaturationBar) findViewById(R.id.sbar);
+        picker.addSaturationBar(sBar);
+        ValueBar vBar = (ValueBar) findViewById(R.id.vbar);
+        picker.addValueBar(vBar);
         picker.setColor(Sys.getInt("color", 0xff00dddd, MainActivity.this));
         picker.setOldCenterColor(picker.getColor());
         picker.setOnColorChangedListener(this);
@@ -192,6 +225,7 @@ public class MainActivity extends AppCompatActivity  implements GoogleApiClient.
         south = Sys.getWapp("south",Sys.SOUTH_DEFAULT,this);
         east = Sys.getWapp("east",Sys.EAST_DEFAULT,this);
         west = Sys.getWapp("west",Sys.WEST_DEFAULT,this);
+        center = Sys.getWapp("center",Sys.EAST_DEFAULT,this);
 
         appN = (Button)findViewById(R.id.appN);
         appN.setText(north.name);
@@ -205,6 +239,9 @@ public class MainActivity extends AppCompatActivity  implements GoogleApiClient.
         appW = (Button)findViewById(R.id.appW);
         appW.setText(west.name);
         appW.setOnClickListener(this);
+        appC = (Button)findViewById(R.id.appC);
+        appC.setText(center.name);
+        appC.setOnClickListener(this);
 
         ArrayList<WappDto> wappsArray = Sys.parseWapps(Sys.getString("wapps","",this),true);
         if (wappsArray.size()==0){
@@ -306,6 +343,8 @@ public class MainActivity extends AppCompatActivity  implements GoogleApiClient.
         Sys.save("color",backColor,MainActivity.this);
         sendMessage(Sys.WEAR_BADGE,badgeIndex+"",false);
         Sys.save("badge",badgeIndex,MainActivity.this);
+        sendMessage(Sys.WEAR_BACK,backIndex+"",false);
+        Sys.save("background",backIndex,MainActivity.this);
         int c = Integer.parseInt(backColor+"");
         sendMessage(Sys.COLOR_PATH,backColor+"",false);
         String wurls = "";
@@ -313,10 +352,12 @@ public class MainActivity extends AppCompatActivity  implements GoogleApiClient.
         WappDto s = Sys.getWapp("south",Sys.SOUTH_DEFAULT,this);
         WappDto e = Sys.getWapp("east",Sys.EAST_DEFAULT,this);
         WappDto w = Sys.getWapp("west",Sys.WEST_DEFAULT,this);
+        WappDto ce = Sys.getWapp("center",Sys.EAST_DEFAULT,this);
         wurls += n.name+","+n.url+";";
         wurls += s.name+","+s.url+";";
         wurls += e.name+","+e.url+";";
-        wurls += w.name+","+w.url;
+        wurls += w.name+","+w.url+";";
+        wurls += ce.name+","+ce.url;
         sendMessage(Sys.WEAR_URLS,wurls,false);
         try{
             LocationManager locationManager = (LocationManager) getApplicationContext().getSystemService(Context.LOCATION_SERVICE);
@@ -383,6 +424,7 @@ public class MainActivity extends AppCompatActivity  implements GoogleApiClient.
             Sys.saveWapp("south",south,this);
             Sys.saveWapp("east",east,this);
             Sys.saveWapp("west",west,this);
+            Sys.saveWapp("center",center,this);
             mGoogleApiClient = new GoogleApiClient.Builder(getApplicationContext())
                     .addApi(Wearable.API)
                     .addConnectionCallbacks(this)
@@ -640,6 +682,67 @@ public class MainActivity extends AppCompatActivity  implements GoogleApiClient.
                 spin.setSelection(wappsArray.indexOf(west));
             }
 
+        }else if (v==appC){
+            AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this, R.style.MyAlertDialogStyle);
+            LayoutInflater inflater = this.getLayoutInflater();
+            View dialogView = inflater.inflate(R.layout.wurl, null);
+            builder.setView(dialogView);
+            AlertDialog alertDialog = builder.create();
+            alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, getResources().getString(R.string.ok), new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    center = new WappDto(name.getText().toString().toUpperCase(),url.getText().toString().replace(" ",""));
+                    appC.setText(center.name);
+                }
+            });
+            alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, getResources().getString(R.string.getWapps), new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.dismiss();
+                    UpdateWapps uw = new UpdateWapps();
+                    uw.execute();
+                }
+            });
+            alertDialog.show();
+            name = (TextView) dialogView.findViewById(R.id.name);
+            url = (TextView) dialogView.findViewById(R.id.url);
+            url.setEnabled(false);
+            spin = (Spinner) dialogView.findViewById(R.id.spinner);
+            ArrayList<WappDto> wappsArray = Sys.parseWapps(Sys.getString("wapps","",this),true);
+            spin.setAdapter(new WappSpinnerAdapter(this,R.layout.wapprow,wappsArray));
+            spin.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                @Override
+                public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                    WappDto dto = (WappDto) spin.getSelectedItem();
+                    if (!dto.equals(center)) {
+                        name.setText(dto.name);
+                    }else{
+                        name.setText(east.name);
+                    }
+                    if (dto.name.equals(getApplicationContext().getResources().getString(R.string.custom))){
+                        url.setText(dto.url.replace(" ",""));
+                        url.setEnabled(true);
+                        url.setHint(getApplicationContext().getResources().getString(R.string.hint));
+                        url.setHintTextColor(0xff999999);
+                    }else{
+                        url.setEnabled(false);
+                        url.setHint("");
+                        url.setText(dto.url);
+
+                    }
+                }
+
+                @Override
+                public void onNothingSelected(AdapterView<?> parent) {
+
+                }
+            });
+            if (center.name.equals(getResources().getString(R.string.custom).toUpperCase())){
+                wappsArray.get(wappsArray.size()-1).url = center.url;
+                spin.setSelection(wappsArray.size()-1);
+            }else{
+                spin.setSelection(wappsArray.indexOf(center));
+            }
         }
 
     }

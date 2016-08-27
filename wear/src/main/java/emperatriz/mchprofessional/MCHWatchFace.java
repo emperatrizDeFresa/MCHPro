@@ -160,15 +160,14 @@ public class MCHWatchFace extends CanvasWatchFaceService implements SensorEventL
         float mYOffset;
         boolean mLowBitAmbient;
         Node wearNode;
-        private Bitmap mBackgroundBitmap;
-        private Bitmap mBackgroundBitmapAmb;
+
         private List<Bitmap> badges;
         private Bitmap badge;
         private Bitmap badge1;
         private Bitmap badge2;
         private Bitmap badge3;
         private Bitmap badge4;
-        private Bitmap badge5,badge6;
+        private Bitmap badge5,badge6, badge7;
         private List<Bitmap> bells;
         private Bitmap bell;
         private Bitmap bell1;
@@ -180,6 +179,14 @@ public class MCHWatchFace extends CanvasWatchFaceService implements SensorEventL
         private Bitmap bell7;
         private Bitmap bell8;
         private Bitmap bell9;
+        private List<Bitmap> backs;
+        private Bitmap back;
+        private Bitmap back1;
+        private Bitmap back2;
+        private Bitmap back3;
+        private Bitmap back4;
+        private Bitmap shadow;
+        private Bitmap shadowAmb;
         private GoogleApiClient mGoogleApiClient;
 
         @Override
@@ -215,12 +222,31 @@ public class MCHWatchFace extends CanvasWatchFaceService implements SensorEventL
             whitePaint.setColor(0xffffffff);
 
 
-            mBackgroundBitmap = BitmapFactory.decodeResource(getResources(), emperatriz.common.R.drawable.back);
-            mBackgroundBitmapAmb = BitmapFactory.decodeResource(getResources(), emperatriz.common.R.drawable.backamb);
+            shadow = BitmapFactory.decodeResource(getResources(), emperatriz.common.R.drawable.shadow);
+            shadowAmb = BitmapFactory.decodeResource(getResources(), emperatriz.common.R.drawable.backamb);
 
-            float scale = ((float) 320) / (float) mBackgroundBitmap.getWidth();
-            mBackgroundBitmap = Bitmap.createScaledBitmap(mBackgroundBitmap,(int) (mBackgroundBitmap.getWidth() * scale),(int) (mBackgroundBitmap.getHeight() * scale), true);
-            mBackgroundBitmapAmb = Bitmap.createScaledBitmap(mBackgroundBitmapAmb,(int) (mBackgroundBitmapAmb.getWidth() * scale),(int) (mBackgroundBitmapAmb.getHeight() * scale), true);
+            float scale = ((float) 320) / (float) shadow.getWidth();
+            shadow = Bitmap.createScaledBitmap(shadow,(int) (shadow.getWidth() * scale),(int) (shadow.getHeight() * scale), true);
+            shadowAmb = Bitmap.createScaledBitmap(shadowAmb,(int) (shadowAmb.getWidth() * scale),(int) (shadowAmb.getHeight() * scale), true);
+
+            backs = new ArrayList<Bitmap>();
+            back = BitmapFactory.decodeResource(getResources(), emperatriz.common.R.drawable.back);
+            back = Bitmap.createScaledBitmap(back,(int) (back.getWidth() * scale),(int) (back.getHeight() * scale), true);
+            backs.add(back);
+            back1 = BitmapFactory.decodeResource(getResources(), emperatriz.common.R.drawable.back1);
+            back1 = Bitmap.createScaledBitmap(back1,(int) (back1.getWidth() * scale),(int) (back1.getHeight() * scale), true);
+            backs.add(back1);
+            back2 = BitmapFactory.decodeResource(getResources(), emperatriz.common.R.drawable.back2);
+            back2 = Bitmap.createScaledBitmap(back2,(int) (back2.getWidth() * scale),(int) (back2.getHeight() * scale), true);
+            backs.add(back2);
+            back3 = BitmapFactory.decodeResource(getResources(), emperatriz.common.R.drawable.back3);
+            back3 = Bitmap.createScaledBitmap(back3,(int) (back3.getWidth() * scale),(int) (back3.getHeight() * scale), true);
+            backs.add(back3);
+            back4 = BitmapFactory.decodeResource(getResources(), emperatriz.common.R.drawable.back4);
+            back4 = Bitmap.createScaledBitmap(back4,(int) (back4.getWidth() * scale),(int) (back4.getHeight() * scale), true);
+            backs.add(back4);
+
+            //shadowAmb = Bitmap.createScaledBitmap(shadowAmb,(int) (shadowAmb.getWidth() * scale),(int) (shadowAmb.getHeight() * scale), true);
 
             bells = new ArrayList<Bitmap>();
             bell = BitmapFactory.decodeResource(getResources(), emperatriz.common.R.drawable.bell);
@@ -276,6 +302,9 @@ public class MCHWatchFace extends CanvasWatchFaceService implements SensorEventL
             badge5 = BitmapFactory.decodeResource(getResources(), emperatriz.common.R.drawable.badge5);
             badge5 = Bitmap.createScaledBitmap(badge5,(int) (badge5.getWidth() * scale),(int) (badge5.getHeight() * scale), true);
             badges.add(badge5);
+            badge7 = BitmapFactory.decodeResource(getResources(), emperatriz.common.R.drawable.badge7);
+            badge7 = Bitmap.createScaledBitmap(badge7,(int) (badge7.getWidth() * scale),(int) (badge7.getHeight() * scale), true);
+            badges.add(badge7);
 
             mGoogleApiClient = new GoogleApiClient.Builder(getApplicationContext())
                     .addApi(Wearable.API)
@@ -412,6 +441,8 @@ public class MCHWatchFace extends CanvasWatchFaceService implements SensorEventL
                             launch(Sys.getWapp("east",Sys.EAST_DEFAULT,getApplicationContext()).url);
                         } else if ((x > 0 && x < 80) && (y > 80 && y < 240)){ // WEST
                             launch(Sys.getWapp("west",Sys.WEST_DEFAULT,getApplicationContext()).url);
+                        }else if ((x > 80 && x < 240) && (y > 80 && y < 240)){ // CENTER
+                            launch(Sys.getWapp("center",Sys.EAST_DEFAULT,getApplicationContext()).url);
                         }
                     }
                     Sys.save("lastTap",Calendar.getInstance().getTimeInMillis(),getApplicationContext());
@@ -476,7 +507,7 @@ public class MCHWatchFace extends CanvasWatchFaceService implements SensorEventL
                 todaySteps=steps;
             }
 
-            DrawUtils.drawBackground(mBackgroundBitmap, mBackgroundBitmapAmb, badges.get(Sys.getInt("badge",0,getApplicationContext())),mBackgroundPaint, whitePaint);
+            DrawUtils.drawBackground(shadow, shadowAmb, backs.get(Sys.getInt("background",0,getApplicationContext())), badges.get(Sys.getInt("badge",0,getApplicationContext())),mBackgroundPaint, whitePaint);
             DrawUtils.drawDate(restPaint);
             DrawUtils.drawHHmm(timePaint);
             DrawUtils.drawSecs(timePaint);
@@ -489,7 +520,7 @@ public class MCHWatchFace extends CanvasWatchFaceService implements SensorEventL
             DrawUtils.drawShortcuts(Sys.getWapp("north",Sys.NORTH_DEFAULT,getApplicationContext()).name,
                                     Sys.getWapp("south",Sys.SOUTH_DEFAULT,getApplicationContext()).name,
                                     Sys.getWapp("east",Sys.EAST_DEFAULT,getApplicationContext()).name,
-                                    Sys.getWapp("west",Sys.WEST_DEFAULT,getApplicationContext()).name, restPaint);
+                                    Sys.getWapp("west",Sys.WEST_DEFAULT,getApplicationContext()).name, DrawUtils.getBackColor(Sys.getInt("background",0,getApplicationContext())), restPaint);
 
         }
 

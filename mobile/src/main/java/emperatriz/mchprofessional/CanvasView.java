@@ -20,6 +20,7 @@ import android.view.View;
 import android.view.WindowManager;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import emperatriz.common.DrawUtils;
 import emperatriz.common.Sys;
@@ -29,21 +30,45 @@ public class CanvasView extends View {
     public int width=320;
     public int height=320;
 
-    int backColor,badgeIndex=0;
+    int backColor,badgeIndex=0, backgroundIndex=0;
 
     Context context;
     Paint timePaint,restPaint,mBackgroundPaint;
     MainActivity ma;
-    Bitmap back, swr;
+    Bitmap swr;
     ArrayList<Bitmap> badges;
-    Bitmap badge, badge1, badge2, badge3, badge4,badge5,badge6;
+    Bitmap badge, badge1, badge2, badge3, badge4,badge5,badge6, badge7;
+    private List<Bitmap> backs;
+    private Bitmap back;
+    private Bitmap back1;
+    private Bitmap back2;
+    private Bitmap back3;
+    private Bitmap back4;
+    private Bitmap shadow;
 
     public CanvasView(Context c, AttributeSet attrs) {
         super(c, attrs);
         context = c;
 
+        shadow = BitmapFactory.decodeResource(getResources(), emperatriz.common.R.drawable.shadow);
+        shadow =  Bitmap.createScaledBitmap(shadow,320,320, true);
+
+        backs = new ArrayList<Bitmap>();
         back = BitmapFactory.decodeResource(getResources(), emperatriz.common.R.drawable.back);
-        back =  Bitmap.createScaledBitmap(back,320,320, true);
+        back = Bitmap.createScaledBitmap(back,320,320, true);
+        backs.add(back);
+        back1 = BitmapFactory.decodeResource(getResources(), emperatriz.common.R.drawable.back1);
+        back1 = Bitmap.createScaledBitmap(back1,320,320, true);
+        backs.add(back1);
+        back2 = BitmapFactory.decodeResource(getResources(), emperatriz.common.R.drawable.back2);
+        back2 = Bitmap.createScaledBitmap(back2,320,320, true);
+        backs.add(back2);
+        back3 = BitmapFactory.decodeResource(getResources(), emperatriz.common.R.drawable.back3);
+        back3 = Bitmap.createScaledBitmap(back3,320,320, true);
+        backs.add(back3);
+        back4 = BitmapFactory.decodeResource(getResources(), emperatriz.common.R.drawable.back4);
+        back4 = Bitmap.createScaledBitmap(back4,320,320, true);
+        backs.add(back4);
 
         swr = BitmapFactory.decodeResource(getResources(), R.drawable.swr50);
         swr =  Bitmap.createScaledBitmap(swr,501,660, true);
@@ -70,6 +95,9 @@ public class CanvasView extends View {
         badge5 = BitmapFactory.decodeResource(getResources(), emperatriz.common.R.drawable.badge5);
         badge5 = Bitmap.createScaledBitmap(badge5,48,48, true);
         badges.add(badge5);
+        badge7 = BitmapFactory.decodeResource(getResources(), emperatriz.common.R.drawable.badge7);
+        badge7 = Bitmap.createScaledBitmap(badge7,48,48, true);
+        badges.add(badge7);
 
         Typeface font1 = Typeface.createFromAsset(c.getAssets(), "fonts/SF Square Head.ttf");
         Typeface font2 = Typeface.createFromAsset(c.getAssets(), "fonts/Square.ttf");
@@ -130,7 +158,8 @@ public class CanvasView extends View {
         mBackgroundPaint.setColor(backColor);
         canvas.drawBitmap(swr,0,0,null);
         canvas.drawRect(DrawUtils.offsetX+0, DrawUtils.offsetY+0, DrawUtils.offsetX+width, DrawUtils.offsetY+height,mBackgroundPaint );
-        canvas.drawBitmap(back,DrawUtils.offsetX+0,DrawUtils.offsetY+0,null);
+        canvas.drawBitmap(shadow,DrawUtils.offsetX+0,DrawUtils.offsetY+0,null);
+        canvas.drawBitmap(backs.get(backgroundIndex),DrawUtils.offsetX+0,DrawUtils.offsetY+0,null);
 
         DrawUtils.mTime.setToNow();
         DrawUtils.now = System.currentTimeMillis();
@@ -149,7 +178,7 @@ public class CanvasView extends View {
         DrawUtils.drawPhoneBattery("79", restPaint);
         DrawUtils.drawSunrise("7:11", restPaint);
         DrawUtils.drawSunset("22:06", restPaint);
-        DrawUtils.drawShortcuts(ma.north.name,ma.south.name,ma.east.name,ma.west.name, restPaint);
+        DrawUtils.drawShortcuts(ma.north.name,ma.south.name,ma.east.name,ma.west.name, DrawUtils.getBackColor(backgroundIndex), restPaint);
     }
 
 
@@ -160,6 +189,11 @@ public class CanvasView extends View {
 
     public void setBadge(int index){
         badgeIndex = index;
+        invalidate();
+    }
+
+    public void setBack(int index){
+        backgroundIndex = index;
         invalidate();
     }
 

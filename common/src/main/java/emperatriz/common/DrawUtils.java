@@ -19,15 +19,27 @@ public class DrawUtils {
     public static long now;
     public static int offsetX,offsetY;
 
-    public static void drawBackground(Bitmap mBackgroundBitmap, Bitmap mBackgroundBitmapAmb,Bitmap badge, Paint mBackgroundPaint, Paint whitePaint){
+
+    public static int getBackColor(int index){
+        if (index==0) return 0xff000000;
+        if (index==1) return 0xff663399;
+        if (index==2) return 0xff0099FF;
+        if (index==3) return 0xffD5006A;
+        if (index==4) return 0xff66CC33;
+        return 0xff000000;
+    }
+
+    public static void drawBackground(Bitmap shadow, Bitmap shadowAmb, Bitmap background,  Bitmap badge, Paint mBackgroundPaint, Paint whitePaint){
         mBackgroundPaint.setColor(color);
         if (isInAmbientMode) {
             canvas.drawRect(offsetX+0, offsetY+0, width, height, whitePaint);
-            canvas.drawBitmap(mBackgroundBitmapAmb, offsetX+0, offsetY+0, mBackgroundPaint);
+            canvas.drawBitmap(shadowAmb, offsetX+0, offsetY+0, mBackgroundPaint);
         } else {
             canvas.drawRect(offsetX+0, offsetY+0, width, height, mBackgroundPaint);
-            canvas.drawBitmap(mBackgroundBitmap, offsetX+0, offsetY+0, mBackgroundPaint);
+            canvas.drawBitmap(shadow, offsetX+0, offsetY+0, mBackgroundPaint);
         }
+
+        canvas.drawBitmap(background, offsetX+0, offsetY+0, mBackgroundPaint);
         canvas.drawBitmap(badge, offsetX+240, offsetY+32, mBackgroundPaint);
 
     }
@@ -198,42 +210,42 @@ public class DrawUtils {
 
     }
 
-    public static void drawShortcuts(String north, String south, String east, String west, Paint paint) {
+    public static void drawShortcuts(String north, String south, String east, String west, int backColor, Paint paint) {
 
         paint.setTextSize(23);
         paint.setLetterSpacing(-0.05f);
 
         float w = paint.measureText(north);
-        paint.setColor(0xff000000);
+        paint.setColor(backColor);
         paint.setStyle(Paint.Style.FILL);
         if (w%2==1) w++;
-        canvas.drawRect(offsetX+width/2-(w+6)/2,offsetY+0,offsetX+width/2+(w+6)/2,offsetY+20,paint);
+        canvas.drawRect(offsetX+width/2-(w+6)/2,offsetY+0,offsetX+width/2+(w+6)/2,offsetY+22,paint);
         paint.setColor(0xffffffff);
         canvas.drawText(north, offsetX+width/2-w/2, offsetY+19, paint);
 
         w = paint.measureText(south);
-        paint.setColor(0xff000000);
+        paint.setColor(backColor);
         paint.setStyle(Paint.Style.FILL);
         if (w%2==1) w++;
-        canvas.drawRect(offsetX+width/2-(w+6)/2,offsetY+300,offsetX+width/2+(w+6)/2,offsetY+height,paint);
+        canvas.drawRect(offsetX+width/2-(w+6)/2,offsetY+298,offsetX+width/2+(w+6)/2,offsetY+height,paint);
         paint.setColor(0xffffffff);
         canvas.drawText(south, offsetX+width/2-w/2, offsetY+317, paint);
 
         canvas.rotate(-90,offsetX+width/2,offsetY+height/2);
 
         w = paint.measureText(west);
-        paint.setColor(0xff000000);
+        paint.setColor(backColor);
         paint.setStyle(Paint.Style.FILL);
         if (w%2==1) w++;
-        canvas.drawRect(offsetX+width/2-(w+6)/2,offsetY+0,offsetX+width/2+(w+6)/2,offsetY+20,paint);
+        canvas.drawRect(offsetX+width/2-(w+6)/2,offsetY+0,offsetX+width/2+(w+6)/2,offsetY+22,paint);
         paint.setColor(0xffffffff);
         canvas.drawText(west, offsetX+width/2-w/2, offsetY+19, paint);
 
         w = paint.measureText(east);
-        paint.setColor(0xff000000);
+        paint.setColor(backColor);
         paint.setStyle(Paint.Style.FILL);
         if (w%2==1) w++;
-        canvas.drawRect(offsetX+width/2-(w+6)/2,offsetY+300,offsetX+width/2+(w+6)/2,offsetY+height,paint);
+        canvas.drawRect(offsetX+width/2-(w+6)/2,offsetY+298,offsetX+width/2+(w+6)/2,offsetY+height,paint);
         paint.setColor(0xffffffff);
         canvas.drawText(east, offsetX+width/2-w/2, offsetY+317, paint);
 

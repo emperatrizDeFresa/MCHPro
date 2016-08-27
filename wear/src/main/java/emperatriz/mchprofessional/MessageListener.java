@@ -72,6 +72,7 @@ public class MessageListener extends WearableListenerService{
             Sys.saveWapp("south",wurlArray.get(1),this);
             Sys.saveWapp("east",wurlArray.get(2),this);
             Sys.saveWapp("west",wurlArray.get(3),this);
+            if (wurlArray.size()>4) Sys.saveWapp("center",wurlArray.get(4),this);
         }else  if (messageEvent.getPath().equals(Sys.WEAR_BADGE)) {
             try{
                 final String badgeIndex = new String(messageEvent.getData());
@@ -79,7 +80,13 @@ public class MessageListener extends WearableListenerService{
             }catch (Exception ex){
                 Sys.save("badge",0,this);
             }
-
+        }else  if (messageEvent.getPath().equals(Sys.WEAR_BACK)) {
+            try{
+                final String badgeIndex = new String(messageEvent.getData());
+                Sys.save("background",Integer.parseInt(badgeIndex),this);
+            }catch (Exception ex){
+                Sys.save("background",0,this);
+            }
         }
     }
 }
