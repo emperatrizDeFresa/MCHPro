@@ -184,7 +184,7 @@ public class MCHWatchFace extends CanvasWatchFaceService implements SensorEventL
         private Bitmap back1;
         private Bitmap back2;
         private Bitmap back3;
-        private Bitmap back4;
+        private Bitmap back4,back5,back6,back7,back8,back9;
         private Bitmap shadow;
         private Bitmap shadowAmb;
         private GoogleApiClient mGoogleApiClient;
@@ -245,7 +245,21 @@ public class MCHWatchFace extends CanvasWatchFaceService implements SensorEventL
             back4 = BitmapFactory.decodeResource(getResources(), emperatriz.common.R.drawable.back4);
             back4 = Bitmap.createScaledBitmap(back4,(int) (back4.getWidth() * scale),(int) (back4.getHeight() * scale), true);
             backs.add(back4);
-
+            back5 = BitmapFactory.decodeResource(getResources(), emperatriz.common.R.drawable.back5);
+            back5 = Bitmap.createScaledBitmap(back5,(int) (back5.getWidth() * scale),(int) (back5.getHeight() * scale), true);
+            backs.add(back5);
+            back6 = BitmapFactory.decodeResource(getResources(), emperatriz.common.R.drawable.back6);
+            back6 = Bitmap.createScaledBitmap(back6,(int) (back6.getWidth() * scale),(int) (back6.getHeight() * scale), true);
+            backs.add(back6);
+            back7 = BitmapFactory.decodeResource(getResources(), emperatriz.common.R.drawable.back7);
+            back7 = Bitmap.createScaledBitmap(back7,(int) (back7.getWidth() * scale),(int) (back7.getHeight() * scale), true);
+            backs.add(back7);
+            back8 = BitmapFactory.decodeResource(getResources(), emperatriz.common.R.drawable.back8);
+            back8 = Bitmap.createScaledBitmap(back8,(int) (back8.getWidth() * scale),(int) (back8.getHeight() * scale), true);
+            backs.add(back8);
+            back9 = BitmapFactory.decodeResource(getResources(), emperatriz.common.R.drawable.back9);
+            back9 = Bitmap.createScaledBitmap(back9,(int) (back9.getWidth() * scale),(int) (back9.getHeight() * scale), true);
+            backs.add(back9);
             //shadowAmb = Bitmap.createScaledBitmap(shadowAmb,(int) (shadowAmb.getWidth() * scale),(int) (shadowAmb.getHeight() * scale), true);
 
             bells = new ArrayList<Bitmap>();

@@ -19,8 +19,8 @@ public class BacksAdapter extends ArrayAdapter<String> {
 
 
 
-    public BacksAdapter(Context context, int resource, List<String> items) {
-        super(context, resource, items);
+    public BacksAdapter(Context context, int resource, List<String> items, boolean showHidden) {
+        super(context, resource, showHidden?items:items.subList(0,8));
     }
 
     @Override
@@ -56,12 +56,22 @@ public class BacksAdapter extends ArrayAdapter<String> {
                 case 4:
                     img.setImageResource(emperatriz.common.R.drawable.back4);
                     break;
-//                case 5:
-//                    img.setImageResource(emperatriz.common.R.drawable.back5);
-//                    break;
-//                case 6:
-//                    img.setImageResource(emperatriz.common.R.drawable.back6);
-//                    break;
+                case 5:
+                    img.setImageResource(emperatriz.common.R.drawable.back5);
+                    break;
+                case 6:
+                    img.setImageResource(emperatriz.common.R.drawable.back6);
+                    break;
+                case 7:
+                    img.setImageResource(emperatriz.common.R.drawable.back7);
+                    break;
+                case 8:
+                    img.setImageResource(emperatriz.common.R.drawable.back8);
+                    break;
+                case 9:
+                    img.setImageResource(emperatriz.common.R.drawable.back9);
+                    break;
+
             }
         }
 

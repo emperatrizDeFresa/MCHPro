@@ -145,14 +145,19 @@ public class MainActivity extends AppCompatActivity  implements GoogleApiClient.
         backsList.add("Azul");
         backsList.add("Carmesí");
         backsList.add("Verde");
+        backsList.add("Papel pintado");
+        backsList.add("Remolinos");
+        backsList.add("Carnaval");
+        backsList.add("Laura");
+        backsList.add("Yune");
         ImageView mch = (ImageView) findViewById(R.id.imageViewmch);
         mch.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 cheat++;
-                if (cheat%6==0){
+                if (cheat%3==0){
                     new AlertDialog.Builder(MainActivity.this)
-                            .setAdapter(new BacksAdapter(MainActivity.this,R.layout.backrow,backsList), new DialogInterface.OnClickListener() {
+                            .setAdapter(new BacksAdapter(MainActivity.this,R.layout.backrow,backsList,center.name.toUpperCase().equals("EMPERATRIZ")), new DialogInterface.OnClickListener() {
 
                                 @Override
                                 public void onClick(DialogInterface dialog, int which) {
@@ -717,7 +722,7 @@ public class MainActivity extends AppCompatActivity  implements GoogleApiClient.
                     if (!dto.equals(center)) {
                         name.setText(dto.name);
                     }else{
-                        name.setText(east.name);
+                        name.setText(center.name);
                     }
                     if (dto.name.equals(getApplicationContext().getResources().getString(R.string.custom))){
                         url.setText(dto.url.replace(" ",""));

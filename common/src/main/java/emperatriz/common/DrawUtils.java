@@ -22,10 +22,15 @@ public class DrawUtils {
 
     public static int getBackColor(int index){
         if (index==0) return 0xff000000;
-        if (index==1) return 0xff663399;
-        if (index==2) return 0xff0099FF;
-        if (index==3) return 0xffD5006A;
-        if (index==4) return 0xff66CC33;
+        if (index==1) return 0xff622181;
+        if (index==2) return 0xff009EE0;
+        if (index==3) return 0xffA10D59;
+        if (index==4) return 0xff96BF0D;
+        if (index==5) return 0x004E4E4E;
+        if (index==6) return 0x001A554A;
+        if (index==7) return 0xffCB6AA2;
+        if (index==8) return 0xff000000;
+        if (index==9) return 0x00324E2F;
         return 0xff000000;
     }
 
@@ -218,16 +223,16 @@ public class DrawUtils {
         float w = paint.measureText(north);
         paint.setColor(backColor);
         paint.setStyle(Paint.Style.FILL);
-        if (w%2==1) w++;
-        canvas.drawRect(offsetX+width/2-(w+6)/2,offsetY+0,offsetX+width/2+(w+6)/2,offsetY+22,paint);
+        //if (w%2==1) w++;
+        canvas.drawRect(offsetX+width/2-w/2-4,offsetY+0,offsetX+width/2+w/2+4,offsetY+22,paint);
         paint.setColor(0xffffffff);
         canvas.drawText(north, offsetX+width/2-w/2, offsetY+19, paint);
 
         w = paint.measureText(south);
         paint.setColor(backColor);
         paint.setStyle(Paint.Style.FILL);
-        if (w%2==1) w++;
-        canvas.drawRect(offsetX+width/2-(w+6)/2,offsetY+298,offsetX+width/2+(w+6)/2,offsetY+height,paint);
+//        if (w%2==1) w++;
+        canvas.drawRect(offsetX+width/2-w/2-4,offsetY+298,offsetX+width/2+w/2+4,offsetY+height,paint);
         paint.setColor(0xffffffff);
         canvas.drawText(south, offsetX+width/2-w/2, offsetY+317, paint);
 
@@ -236,16 +241,16 @@ public class DrawUtils {
         w = paint.measureText(west);
         paint.setColor(backColor);
         paint.setStyle(Paint.Style.FILL);
-        if (w%2==1) w++;
-        canvas.drawRect(offsetX+width/2-(w+6)/2,offsetY+0,offsetX+width/2+(w+6)/2,offsetY+22,paint);
+//        if (w%2==1) w++;
+        canvas.drawRect(offsetX+width/2-w/2-4,offsetY+0,offsetX+width/2+w/2+4,offsetY+22,paint);
         paint.setColor(0xffffffff);
         canvas.drawText(west, offsetX+width/2-w/2, offsetY+19, paint);
 
         w = paint.measureText(east);
         paint.setColor(backColor);
         paint.setStyle(Paint.Style.FILL);
-        if (w%2==1) w++;
-        canvas.drawRect(offsetX+width/2-(w+6)/2,offsetY+298,offsetX+width/2+(w+6)/2,offsetY+height,paint);
+//        if (w%2==1) w++;
+        canvas.drawRect(offsetX+width/2-w/2-4,offsetY+298,offsetX+width/2+w/2+4,offsetY+height,paint);
         paint.setColor(0xffffffff);
         canvas.drawText(east, offsetX+width/2-w/2, offsetY+317, paint);
 

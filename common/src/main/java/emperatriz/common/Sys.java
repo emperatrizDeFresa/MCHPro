@@ -92,13 +92,16 @@ public class Sys {
     }
 
     public static WappDto getWapp(String key, WappDto defValue, Context context) {
-        SharedPreferences preferences = context.getSharedPreferences("mchPro", context.MODE_PRIVATE);
-        String pair =  preferences.getString(key, defValue.name+";"+defValue.url);
-        WappDto dto = new WappDto();
-        dto.name = pair.split(";")[0];
-        dto.url = pair.split(";")[1];
-        return dto;
-
+        try {
+            SharedPreferences preferences = context.getSharedPreferences("mchPro", context.MODE_PRIVATE);
+            String pair = preferences.getString(key, defValue.name + ";" + defValue.url);
+            WappDto dto = new WappDto();
+            dto.name = pair.split(";")[0];
+            dto.url = pair.split(";")[1];
+            return dto;
+        }catch (Exception ex){
+            return defValue;
+        }
     }
 
     public static String getInstalledApps(Context ctx) {
